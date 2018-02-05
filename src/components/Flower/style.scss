@@ -1,0 +1,57 @@
+@import '../../style/core/index.scss';
+
+$time: 0.05s;
+$item-num: 24;
+$item-width: 3;
+$item-height: 18;
+$initOpacity: 0.05;
+
+$animation-duration: $time * $item-num;
+$rotateDeg: 360deg/$item-num;
+
+
+
+@mixin load-item($index:0) {
+    transform: rotate($index * $rotateDeg);
+    animation-delay: $time * $index;
+}
+
+#flower {
+    width: r($item-height*4);
+    height: r($item-height*4);
+    &>.wrapper {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        // background: rgba(64,64,64,0.85);
+        // box-shadow: 0 1px 4px 0 rgba(0,0,0,0.20);
+        border-radius: 6px;
+        color: #fff;
+    }
+    .item {
+        width: r($item-width);
+        height: r($item-height);
+        position: absolute;
+        left: 50%;
+        opacity: $initOpacity;
+        background-color: #0e0e0e;
+        border-radius: 1px;
+        transform-origin: 0 r($item-height*2);
+        -webkit-animation: load $animation-duration ease infinite;
+    }
+
+    @-webkit-keyframes load {
+        0% {
+            opacity: 1;
+        }
+        100% {
+            opacity: $initOpacity;
+        }
+    }
+    $itemNum: $item-num;
+    @for $i from 1 through $itemNum {
+        .item:nth-child(#{$i}) {
+            @include load-item($i - 1);
+        }
+    }
+}

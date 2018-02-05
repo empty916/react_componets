@@ -1,70 +1,28 @@
 @import '../../style/core/index.scss';
 
-$time: 0.05s;
-$item-num: 24;
-$animation-duration: $time * $item-num;
-$rotateDeg: 360deg/$item-num;
-
-$item-width: 3;
-$item-height: 18;
-
-$initOpacity: 0.05;
-
-@mixin load-item($index:0) {
-    transform: rotate($index * $rotateDeg);
-    animation-delay: $time * $index;
-}
-
-#loading {
+#loading{
     width: r(200);
     height: r(180);
-    .wrapper {
+    &>.wrapper{
         width: 100%;
         height: 100%;
+        display: flex;
+        // justify-content: center;
+        flex-direction: column;
+        align-items: center;
         padding-top: r(32);
+        
         background: rgba(64,64,64,0.85);
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,0.20);
-        border-radius: 6px;
-        color: #fff;
-    }
-    .loading-icon{
-        width: 100%;
-        height: r(72);
-        position: relative;
-        margin-bottom: r(18);
+        box-shadow: 0 1px r(4) 0 rgba(0,0,0,0.20);
+        border-radius: r(6);
     }
     .loading-text{
-        width: 100%;
-        height: auto;
-        display: flex;
-        justify-content: center;
-        color: #FFFFFF;
-        @include font-size(12px);
+        margin-top: r(18);
+        color:#fff;
     }
-    .item {
-        width: r($item-width);
-        height: r($item-height);
-        position: absolute;
-        left: 50%;
-        opacity: $initOpacity;
-        background-color: #fff;
-        border-radius: 1px;
-        transform-origin: r($item-width/2) r($item-height*2);
-        -webkit-animation: load $animation-duration ease infinite;
-    }
-
-    @-webkit-keyframes load {
-        0% {
-            opacity: 1;
-        }
-        100% {
-            opacity: $initOpacity;
-        }
-    }
-    $itemNum: $item-num;
-    @for $i from 1 through $itemNum {
-        .item:nth-child(#{$i}) {
-            @include load-item($i - 1);
+    #flower{
+        .item{
+            background-color: #fff;
         }
     }
 }
