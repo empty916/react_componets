@@ -10,7 +10,7 @@
         background-image: url('../../images/'+$imgName+'@3x.png');
     }
 }
-
+// 1px 方案，如果使用lib flexible方案的话则不需要此方法，直接设置1px就好
 @mixin border-1px($borderKind:top,$borderColor:#979797) {
     border-#{$borderKind}: 1px solid $borderColor;
     @media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {
@@ -18,5 +18,49 @@
     }
     @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
         border-#{$borderKind}: 0.3px solid $borderColor;
+    }
+}
+// 根据dpr设置字体大小
+@mixin font-size($px){
+    & {
+        font-size: $px;
+    }
+    [data-dpr="2"] & {
+        font-size: $px * 2;
+    }
+    [data-dpr="3"] & {
+        font-size: $px * 3;
+    }
+}
+// 根据dpr设置属性的值
+@mixin property-dpr($property, $px-values){
+    //判断参数是不是单个数字，若是
+    @if type-of($px-values) == "number"{
+            #{$property}: $px-values;
+        [data-dpr="2"] & {
+            #{$property}: $px-values * 2;
+        }
+        [data-dpr="3"] & {
+            #{$property}: $px-values * 3;
+        }
+    }
+    //若为数组则
+    @else {
+        //新建两个空数组
+        $twodpr-values:();
+        $threedpr-values:();
+        //遍历多值变量
+        @each $value in $px-values{
+            $twodpr-values:append($twodpr-values,$value*2);
+            $threedpr-values:append($threedpr-values,$value*3)
+        }
+        // 返回处理后的多值变量
+           #{$property}: $px-values;
+            [data-dpr="2"] & {
+                #{$property}: $twodpr-values;
+            }
+            [data-dpr="3"] & {
+                #{$property}: $threedpr-values;
+            }
     }
 }

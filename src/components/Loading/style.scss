@@ -1,4 +1,4 @@
-@import '../../style/core/func.scss';
+@import '../../style/core/index.scss';
 
 $time: 0.05s;
 $item-num: 24;
@@ -39,6 +39,7 @@ $initOpacity: 0.05;
         display: flex;
         justify-content: center;
         color: #FFFFFF;
+        @include font-size(12px);
     }
     .item {
         width: r($item-width);
