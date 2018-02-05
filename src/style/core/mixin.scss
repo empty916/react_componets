@@ -1,0 +1,22 @@
+@import './func.scss';
+
+@mixin retinaImg($imgName,$width,$height) {
+    width: r($width);
+    height: r($height);
+    background-size: r($width) r($height);
+    background-repeat: no-repeat;
+    background-image: url('../../images/'+$imgName+'@2x.png');
+    @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
+        background-image: url('../../images/'+$imgName+'@3x.png');
+    }
+}
+
+@mixin border-1px($borderKind:top,$borderColor:#979797) {
+    border-#{$borderKind}: 1px solid $borderColor;
+    @media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {
+        border-#{$borderKind}: 0.5px solid $borderColor;
+    }
+    @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
+        border-#{$borderKind}: 0.3px solid $borderColor;
+    }
+}
