@@ -6,7 +6,7 @@ class Loading extends PureComponent{
         super(props);
     }
     render(){
-        const itemNum = 20;
+        const itemNum = 24;
         const { text } = this.props;
         let items = [];
         for(let i=0; i < itemNum; i++) {

@@ -1,12 +1,14 @@
 @import '../../style/core/func.scss';
 
-$time: 0.08s;
-$item-num: 20;
+$time: 0.05s;
+$item-num: 24;
 $animation-duration: $time * $item-num;
 $rotateDeg: 360deg/$item-num;
 
 $item-width: 3;
 $item-height: 18;
+
+$initOpacity: 0.05;
 
 @mixin load-item($index:0) {
     transform: rotate($index * $rotateDeg);
@@ -17,7 +19,6 @@ $item-height: 18;
     width: r(200);
     height: r(180);
     .wrapper {
-        
         width: 100%;
         height: 100%;
         padding-top: r(32);
@@ -43,9 +44,8 @@ $item-height: 18;
         width: r($item-width);
         height: r($item-height);
         position: absolute;
-        // top: 50%;
         left: 50%;
-        opacity: 0.05;
+        opacity: $initOpacity;
         background-color: #fff;
         border-radius: 1px;
         transform-origin: r($item-width/2) r($item-height*2);
@@ -57,7 +57,7 @@ $item-height: 18;
             opacity: 1;
         }
         100% {
-            opacity: 0.05;
+            opacity: $initOpacity;
         }
     }
     $itemNum: $item-num;
