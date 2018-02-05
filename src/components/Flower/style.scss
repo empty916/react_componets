@@ -1,6 +1,7 @@
 @import '../../style/core/index.scss';
 
-// 一个菊花闪烁的频率，数值越小表示 菊花转的越快 petal：花瓣的意思
+// 一个菊花闪烁的频率，数值越小表示 菊花转的越快 
+// petal：花瓣
 $time: 0.05s;
 // 菊花花瓣个数
 $petal-num: 24;

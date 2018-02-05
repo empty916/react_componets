@@ -3,6 +3,7 @@ import './style.scss'
 
 /**
  * 这个组件只是一个菊花🌻
+ * petal：花瓣
  */
 const petalNum = 24;
 let petals = [];
