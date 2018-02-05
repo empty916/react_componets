@@ -1,29 +1,29 @@
 @import '../../style/core/index.scss';
 
-// 一个菊花闪烁的频率，数值越小表示 菊花转的越快 
+// 一个菊花闪烁的频率，数值越小表示 菊花转的越快 petal：花瓣的意思
 $time: 0.05s;
 // 菊花花瓣个数
-$item-num: 24;
+$petal-num: 24;
 // 花瓣的宽度和高度
-$item-width: 4;
-$item-height: 18;
+$petal-width: 4;
+$petal-height: 18;
 // 菊花初始|最小透明度
 $initOpacity: 0.05;
 // 菊花转一圈的时间
-$animation-duration: $time * $item-num;
+$animation-duration: $time * $petal-num;
 // 每一瓣花瓣的旋转角度
-$rotateDeg: 360deg/$item-num;
+$rotateDeg: 360deg/$petal-num;
 
 
 
-@mixin load-item($index:0) {
+@mixin load-petal($index:0) {
     transform: rotate($index * $rotateDeg);
     animation-delay: $time * $index;
 }
 
 #flower {
-    width: r($item-height*4);
-    height: r($item-height*4);
+    width: r($petal-height*4);
+    height: r($petal-height*4);
     &>.wrapper {
         width: 100%;
         height: 100%;
@@ -33,15 +33,15 @@ $rotateDeg: 360deg/$item-num;
         border-radius: r(6);
         color: #fff;
     }
-    .item {
-        width: r($item-width);
-        height: r($item-height);
+    .petal {
+        width: r($petal-width);
+        height: r($petal-height);
         position: absolute;
         left: 50%;
         opacity: $initOpacity;
         background-color: #0e0e0e;
         border-radius: 1px;
-        transform-origin: 0 r($item-height*2);
+        transform-origin: 0 r($petal-height*2);
         -webkit-animation: load $animation-duration ease infinite;
     }
 
@@ -53,10 +53,10 @@ $rotateDeg: 360deg/$item-num;
             opacity: $initOpacity;
         }
     }
-    $itemNum: $item-num;
-    @for $i from 1 through $itemNum {
-        .item:nth-child(#{$i}) {
-            @include load-item($i - 1);
+    $petalNum: $petal-num;
+    @for $i from 1 through $petalNum {
+        .petal:nth-child(#{$i}) {
+            @include load-petal($i - 1);
         }
     }
 }

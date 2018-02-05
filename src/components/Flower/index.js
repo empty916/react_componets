@@ -4,15 +4,15 @@ import './style.scss'
 /**
  * 这个组件只是一个菊花🌻
  */
-const itemNum = 24;
-let items = [];
-for(let i=0; i < itemNum; i++) {
-    items.push(<div key={i} className='item'/>);
+const petalNum = 24;
+let petals = [];
+for(let i=0; i < petalNum; i++) {
+    petals.push(<div key={i} className='petal'/>);
 }
 
 const Flower = () => (
     <div id="flower">
-        <div className="wrapper">{items}</div>
+        <div className="wrapper">{petals}</div>
     </div>
 );
 
