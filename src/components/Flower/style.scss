@@ -8,7 +8,9 @@ $petal-num: 24;
 // 花瓣的宽度和高度
 $petal-width: 4;
 $petal-height: 18;
-// 菊花初始|最小透明度
+// 花瓣的圆角
+$petal-border-radius: 1px;
+// 菊花 初始|最小 透明度
 $initOpacity: 0.05;
 // 菊花转一圈的时间
 $animation-duration: $time * $petal-num;
@@ -29,8 +31,6 @@ $rotateDeg: 360deg/$petal-num;
         width: 100%;
         height: 100%;
         position: relative;
-        // background: rgba(64,64,64,0.85);
-        // box-shadow: 0 1px 4px 0 rgba(0,0,0,0.20);
         border-radius: r(6);
         color: #fff;
     }
@@ -41,7 +41,7 @@ $rotateDeg: 360deg/$petal-num;
         left: 50%;
         opacity: $initOpacity;
         background-color: #0e0e0e;
-        border-radius: 1px;
+        border-radius: $petal-border-radius;
         transform-origin: 0 r($petal-height*2);
         -webkit-animation: load $animation-duration ease infinite;
     }
