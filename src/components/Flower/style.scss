@@ -1,12 +1,17 @@
 @import '../../style/core/index.scss';
 
+// 一个菊花闪烁的频率，数值越小表示 菊花转的越快 
 $time: 0.05s;
+// 菊花花瓣个数
 $item-num: 24;
-$item-width: 3;
+// 花瓣的宽度和高度
+$item-width: 4;
 $item-height: 18;
+// 菊花初始|最小透明度
 $initOpacity: 0.05;
-
+// 菊花转一圈的时间
 $animation-duration: $time * $item-num;
+// 每一瓣花瓣的旋转角度
 $rotateDeg: 360deg/$item-num;
 
 
@@ -25,7 +30,7 @@ $rotateDeg: 360deg/$item-num;
         position: relative;
         // background: rgba(64,64,64,0.85);
         // box-shadow: 0 1px 4px 0 rgba(0,0,0,0.20);
-        border-radius: 6px;
+        border-radius: r(6);
         color: #fff;
     }
     .item {
