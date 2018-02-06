@@ -15,6 +15,7 @@ class Loading extends PureComponent{
         const state = {
             petalWidth: size,
             petalHeight: size,
+            petalNum: size,
 
         };
         return(
@@ -23,7 +24,9 @@ class Loading extends PureComponent{
                     <Flower {...this.state}/>
                     <div className="loading-text">{this.props.text}</div>
                 </div>
-                <button style={{width: '200px',height: '60px', position: 'absolute', bottom: '0'}} onClick={() => {this.setState(state)}}>change</button>
+                <button 
+                    style={{width: '200px',height: '60px', position: 'absolute', bottom: '0'}} 
+                    onClick={() => {this.setState(state)}}>change</button>
             </div>
         )
     }

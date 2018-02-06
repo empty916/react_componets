@@ -57,7 +57,7 @@ class Flower extends PureComponent{
             petalHeight, 
             petalBorderRadius } = props ? props : this.props;
         time = time ? time : this.state.time;
-
+        petalNum = props ? this.state.petalNum : petalNum;
         let state = {};
         state.time = time;
         state.petalHeight = !!petalHeight ? petalHeight : (size / 4);
@@ -99,8 +99,8 @@ class Flower extends PureComponent{
             transformOrigin: `0 ${r(petalHeight * 2)}`,
             transform: `rotate(${index * rotateDeg}deg)`,
             webkitAnimation: `load ${animationDuration}s ease infinite`,
-            animation: `load ${animationDuration}s ease infinite`,
-            animationDelay: `${time * index}s`,
+            animation: `load ${animationDuration}s ease ${time * index}s infinite`,
+            // animationDelay: `${time * index}s`,
         }
     };
 
@@ -108,7 +108,7 @@ class Flower extends PureComponent{
     render(){
         let petals = [];
         for(let i=0; i < this.state.petalNum; i++) {
-            petals.push(<div  style = {this.getPetalStyle(i)}/>);
+            petals.push(<div key={i} style = {this.getPetalStyle(i)}/>);
         }
 
         return(
