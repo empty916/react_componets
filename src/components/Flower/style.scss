@@ -1,50 +1,48 @@
 @import '../../style/core/index.scss';
 
-// 一个菊花闪烁的频率，数值越小表示 菊花转的越快 
-// petal：花瓣
-$time: 0.05s;
-// 菊花花瓣个数
-$petal-num: 24;
-// 花瓣的宽度和高度
-$petal-width: 4;
-$petal-height: 18;
-// 花瓣的圆角
-$petal-border-radius: 1px;
-// 菊花 初始|最小 透明度
+// // 一个菊花闪烁的频率，数值越小表示 菊花转的越快 
+// // petal：花瓣
+// $time: 0.05s;
+// // 菊花花瓣个数
+// $petal-num: 24;
+// // 花瓣的宽度和高度
+// $petal-width: 4;
+// $petal-height: 18;
+// // 花瓣的圆角
+// $petal-border-radius: 1px;
+// // 菊花 初始|最小 透明度
 $initOpacity: 0.05;
-// 菊花转一圈的时间
-$animation-duration: $time * $petal-num;
-// 每一瓣花瓣的旋转角度
-$rotateDeg: 360deg/$petal-num;
+// // 菊花转一圈的时间
+// $animation-duration: $time * $petal-num;
+// // 每一瓣花瓣的旋转角度
+// $rotateDeg: 360deg/$petal-num;
 
 
-
-@mixin load-petal($index:0) {
-    transform: rotate($index * $rotateDeg);
-    animation-delay: $time * $index;
-}
-
+// @mixin load-petal($index:0) {
+//     transform: rotate($index * $rotateDeg);
+//     animation-delay: $time * $index;
+// }
 #flower {
-    width: r($petal-height*4);
-    height: r($petal-height*4);
+    // width: r($petal-height*4);
+    // height: r($petal-height*4);
     &>.wrapper {
         width: 100%;
         height: 100%;
         position: relative;
-        border-radius: r(6);
-        color: #fff;
+        // border-radius: r(6);
+        // color: #fff;
     }
-    .petal {
-        width: r($petal-width);
-        height: r($petal-height);
-        position: absolute;
-        left: 50%;
-        opacity: $initOpacity;
-        background-color: #0e0e0e;
-        border-radius: $petal-border-radius;
-        transform-origin: 0 r($petal-height*2);
-        -webkit-animation: load $animation-duration ease infinite;
-    }
+    // .petal {
+    //     width: r($petal-width);
+    //     height: r($petal-height);
+    //     position: absolute;
+    //     left: 50%;
+    //     opacity: $initOpacity;
+    //     background-color: #0e0e0e;
+    //     border-radius: $petal-border-radius;
+    //     transform-origin: 0 r($petal-height*2);
+    //     -webkit-animation: load $animation-duration ease infinite;
+    // }
 
     @-webkit-keyframes load {
         0% {
@@ -54,10 +52,10 @@ $rotateDeg: 360deg/$petal-num;
             opacity: $initOpacity;
         }
     }
-    $petalNum: $petal-num;
-    @for $i from 1 through $petalNum {
-        .petal:nth-child(#{$i}) {
-            @include load-petal($i - 1);
-        }
-    }
+    // $petalNum: $petal-num;
+    // @for $i from 1 through $petalNum {
+    //     .petal:nth-child(#{$i}) {
+    //         @include load-petal($i - 1);
+    //     }
+    // }
 }
