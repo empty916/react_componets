@@ -11,22 +11,22 @@ class Loading extends PureComponent{
         petalBorderRadius: '50%',
     };
     render(){
-        const size = parseInt(Math.random()*100);
-        const state = {
-            petalWidth: size,
-            petalHeight: size,
-            petalNum: size,
+        // const size = parseInt(Math.random()*100);
+        // const state = {
+        //     petalWidth: size,
+        //     petalHeight: size,
+        //     petalNum: size,
 
-        };
+        // };
         return(
             <div id="loading">
                 <div className="wrapper">
                     <Flower {...this.state}/>
                     <div className="loading-text">{this.props.text}</div>
                 </div>
-                <button 
+                {/* <button 
                     style={{width: '200px',height: '60px', position: 'absolute', bottom: '0'}} 
-                    onClick={() => {this.setState(state)}}>change</button>
+                    onClick={() => {this.setState(state)}}>change</button> */}
             </div>
         )
     }
