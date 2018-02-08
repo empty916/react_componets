@@ -6,6 +6,9 @@ import './style.scss'
  * petal：花瓣
  */
 const r = px => {
+    if(/[A-Za-z]/.test(px)){ // 去除字母
+        px = px.replace(/[A-Za-z]/g, '');
+    }
     if(px=='1'){
         return '1px';
     } else if(/%/.test(px)){
@@ -47,6 +50,9 @@ class Flower extends PureComponent{
     componentWillReceiveProps(newProps){
         this.refresh(newProps);
     }
+    shouldComponentUpdate(){
+        return this.props.update || false;
+    }
     refresh = props => {
         let { 
             size, 
@@ -73,8 +79,14 @@ class Flower extends PureComponent{
         { // 花的样式
             width: r(this.state.petalHeight * 4),
             height: r(this.state.petalHeight * 4),
+            // transform: `translateX(${r(this.state.petalWidth / -2)})`,
         }
     );
+    translateWrapper = () => {
+        return {
+            transform: `translateX(${r(this.state.petalWidth / -2)})`,
+        }
+    }
     getPetalStyle = (index) => {
         const {
             petalWidth,
@@ -96,7 +108,7 @@ class Flower extends PureComponent{
             opacity: initOpacity,
             backgroundColor: petalBackGroundColor,
             borderRadius: r(petalBorderRadius),
-            transformOrigin: `0 ${r(petalHeight * 2)}`,
+            transformOrigin: `${r(petalWidth / 2)} ${r(petalHeight * 2)}`,
             transform: `rotate(${index * rotateDeg}deg)`,
             webkitAnimation: `load ${animationDuration}s ease infinite`,
             animation: `load ${animationDuration}s ease ${time * index}s infinite`,
@@ -113,11 +125,12 @@ class Flower extends PureComponent{
 
         return(
             <div id="flower" style={this.flowerStyle()}>
-                <div className="wrapper">{petals}</div>
+                <div className="wrapper" style={this.translateWrapper()}>{petals}</div>
             </div>
         )
     }
 }
+
 Flower.defaultProps = {
     size: 72, // 菊花大小 优先级低于petaHeight
     petalWidth: 4, // 花瓣宽度
@@ -126,6 +139,7 @@ Flower.defaultProps = {
     bgColor: '#fff', // 花瓣背景色
     petalNum: 24, // 花瓣数量
     // time: 0.05*24, // 转动一圈所用的时间
+    update: false,// 要不要实时更新？就是动态修改菊花属性的时候会更新
 };
 
 export default Flower;
