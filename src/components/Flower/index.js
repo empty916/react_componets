@@ -18,30 +18,21 @@ const r = px => {
     }
 }; // 样式单位适配
 
+// petalNum = 24; // 花瓣数量
+// time = 0.05; // 一个菊花闪烁的频率，数值越小表示 菊花转的越快 
+// petalWidth = 4; // 花瓣的宽度
+// petalHeight = 18; // 花瓣的高度
+// petalBorderRadius = 1;  // 花瓣的圆角
+// petalBackGroundColor = '#000';
+// animationDuration = time * petalNum; // 菊花转一圈的时间
+// rotateDeg = 360/petalNum; // 每一瓣花瓣的旋转角度
+
 class Flower extends PureComponent{
 
     constructor(){
         super();
-        const petalNum = 24; // 花瓣数量
-        const time = 0.05; // 一个菊花闪烁的频率，数值越小表示 菊花转的越快 
-        const petalWidth = 4; // 花瓣的宽度
-        const petalHeight = 18; // 花瓣的高度
-        const petalBorderRadius = 1;  // 花瓣的圆角
-        const petalBackGroundColor = '#000';
-        const initOpacity = '0.05'; // 菊花 初始|最小 透明度
-        const animationDuration = time * petalNum; // 菊花转一圈的时间
-        const rotateDeg = 360/petalNum; // 每一瓣花瓣的旋转角度
-
         this.state = {
-            petalNum,
-            time,
-            petalWidth,
-            petalHeight,
-            petalBorderRadius,
-            petalBackGroundColor,
-            initOpacity,
-            animationDuration,
-            rotateDeg,
+            initOpacity: '0.05', // 菊花 初始|最小 透明度,
         };
     }
     componentWillMount() {
@@ -61,9 +52,12 @@ class Flower extends PureComponent{
             petalNum,
             petalWidth, 
             petalHeight, 
-            petalBorderRadius } = props ? props : this.props;
-        time = time ? time : this.state.time;
+            petalBorderRadius 
+        } = props ? props : this.props;
+
         petalNum = props ? this.state.petalNum : petalNum;
+        time = time ? time/petalNum : this.state.time;
+
         let state = {};
         state.time = time;
         state.petalHeight = !!petalHeight ? petalHeight : (size / 4);
@@ -82,11 +76,12 @@ class Flower extends PureComponent{
             // transform: `translateX(${r(this.state.petalWidth / -2)})`,
         }
     );
-    translateWrapper = () => {
+    // 矫正位置用的 因为菊花的中心是transformOrigin往右移了半个花瓣宽度，所以菊花容器要左移等长距离
+    translateWrapper = () => { 
         return {
             transform: `translateX(${r(this.state.petalWidth / -2)})`,
         }
-    }
+    };
     getPetalStyle = (index) => {
         const {
             petalWidth,
@@ -138,7 +133,7 @@ Flower.defaultProps = {
     petalBorderRadius: 1, // 花瓣圆角大小
     bgColor: '#fff', // 花瓣背景色
     petalNum: 24, // 花瓣数量
-    // time: 0.05*24, // 转动一圈所用的时间
+    time: 0.05*24, // 转动一圈所用的时间,感觉应该叫cycle(周期) 或者 frequency(频率)好点，
     update: false,// 要不要实时更新？就是动态修改菊花属性的时候会更新
 };
 
