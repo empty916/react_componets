@@ -14,25 +14,23 @@ let lazyLoadImgs = [];
 let timer = null;
 export const lazyLoadController = () => {
     let len = lazyLoadImgs.length;
+    let step = 0.4;
+    let limitRadio = 2;
+
     let controllImgLoad = () => {
         //1倍视界图优先加载
-        let baseRatio = 1;
-        for(let i =0;i < len; ){
-            lazyLoadImgs[i].fun(false, baseRatio);
-            i+1 < len && lazyLoadImgs[i+1].fun(false, baseRatio);
-            i+2 < len && lazyLoadImgs[i+2].fun(false, baseRatio);
-            i+=3;
-        }
-        //2倍视界图次优先加载
-        for(let i =0;i < len; ){
-            lazyLoadImgs[i].fun(false, baseRatio + 1);
-            i+1 < len && lazyLoadImgs[i+1].fun(false, baseRatio + 1);
-            i+2 < len && lazyLoadImgs[i+2].fun(false, baseRatio + 1);
-            i+=3;
+        //1 + step倍视界图次优先加载
+        //1 + step * 2倍视界图次优先加载
+        // ...
+        for(let baseRatio = 1; baseRatio < limitRadio; baseRatio += step){
+            for(let i =0; i < len;){
+                lazyLoadImgs[i].fun(false, baseRatio);
+                i+1 < len && lazyLoadImgs[i+1].fun(false, baseRatio);
+                i+2 < len && lazyLoadImgs[i+2].fun(false, baseRatio);
+                i+=3;
+            }
         }
     };
-
-    // controllImgLoad();
     if(!!timer) clearTimeout(timer);
     timer = setTimeout(controllImgLoad, 20);
 
@@ -149,7 +147,6 @@ class Img extends PureComponent{
 Img.defaultProps = {
     src: defImg,
     lazy: false,
-    type: 'part',
     className: '',
 };
 

@@ -40,7 +40,6 @@ class Slide extends PureComponent{
                         this.props.sources.map((item, index) => (
                             <div className="slide-item" key={index}>
                                 {item}
-                                {/*<Img src={item} className='img' lazy wrapper={this.bs}/>*/}
                             </div>
                         ))
                     }
