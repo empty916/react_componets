@@ -26,8 +26,8 @@ const sources = imgs.map(item=><Img className='img' src={item} lazy/>);
 
 ReactDOM.render(
 	<div>
-        {/*<Slide sources={imgs}/>*/}
-        {sources}
+        <Slide sources={sources}/>
+        {/*{sources}*/}
     </div>,
     rootElement
 );

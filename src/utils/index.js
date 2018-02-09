@@ -18,11 +18,11 @@ export const isInViewport = (el, ratio) => {
     if(typeof ratio !== 'number') ratio = 1;
     else Math.max(1, ratio);
 
-    ratio--;
+    ratio-= 1;
     let topLimit = -ratio * innerHeight;
     let bottomLimit = (1 + ratio) * innerHeight;
     let leftLimit = -ratio * innerWidth;
-    let rightLimit = (1 + ratio) * innerHeight;
+    let rightLimit = (1 + ratio) * innerWidth;
 
     return top >= topLimit &&
         bottom <= bottomLimit &&

@@ -35,12 +35,12 @@ class Slide extends PureComponent{
     render(){
         return(
             <div id="slide" ref={'slide'}>
-                <div className="slide-group" style={{width:`${100*this.props.sources.length}%`}}>
+                <div className="slide-group" style={{width:`${10*this.props.sources.length}rem`}}>
                     {
                         this.props.sources.map((item, index) => (
                             <div className="slide-item" key={index}>
-                                {/*{item}*/}
-                                <Img src={item} className='img' lazy wrapper={this.bs}/>
+                                {item}
+                                {/*<Img src={item} className='img' lazy wrapper={this.bs}/>*/}
                             </div>
                         ))
                     }

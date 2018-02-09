@@ -15,29 +15,24 @@ let timer = null;
 export const lazyLoadController = () => {
     let len = lazyLoadImgs.length;
     let controllImgLoad = () => {
-        //当前视界图优先加载
+        //1倍视界图优先加载
+        let baseRatio = 1;
         for(let i =0;i < len; ){
-            lazyLoadImgs[i].fun(false,1);
-            i+1 < len && lazyLoadImgs[i+1].fun(false,1);
-            i+2 < len && lazyLoadImgs[i+2].fun(false,1);
+            lazyLoadImgs[i].fun(false, baseRatio);
+            i+1 < len && lazyLoadImgs[i+1].fun(false, baseRatio);
+            i+2 < len && lazyLoadImgs[i+2].fun(false, baseRatio);
             i+=3;
         }
-        //1.5倍视界图次优先加载
+        //2倍视界图次优先加载
         for(let i =0;i < len; ){
-            lazyLoadImgs[i].fun(1.5);
-            i+1 < len && lazyLoadImgs[i+1].fun(false,1.5);
-            i+2 < len && lazyLoadImgs[i+2].fun(false,1.5);
-            i+=3;
-        }
-        //2倍视界图再次优先加载
-        for(let i =0;i < len; ){
-            lazyLoadImgs[i].fun(1.5);
-            i+1 < len && lazyLoadImgs[i+1].fun(false,2);
-            i+2 < len && lazyLoadImgs[i+2].fun(false,2);
+            lazyLoadImgs[i].fun(false, baseRatio + 1);
+            i+1 < len && lazyLoadImgs[i+1].fun(false, baseRatio + 1);
+            i+2 < len && lazyLoadImgs[i+2].fun(false, baseRatio + 1);
             i+=3;
         }
     };
 
+    // controllImgLoad();
     if(!!timer) clearTimeout(timer);
     timer = setTimeout(controllImgLoad, 20);
 
@@ -49,6 +44,7 @@ const toggleListener = type => {
         isListen = true;
         window.addEventListener('scroll', lazyLoadController, false);
         window.addEventListener('resize', lazyLoadController, false);
+        setTimeout(lazyLoadController, 100);
     }
     if(type === 'remove'){
         window.removeEventListener('scroll', lazyLoadController, false);
