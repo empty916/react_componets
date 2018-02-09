@@ -45,3 +45,4 @@ sass预处理器
     src: '',图片地址
     lazy: false, 是否懒加载
     type: 'part'|'all' 图片元素部分可见|完全可见时加载图片
+    className: '', 图片样式

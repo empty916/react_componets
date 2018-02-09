@@ -123,6 +123,7 @@ Img.defaultProps = {
     src: defImg,
     lazy: false,
     type: 'part',
+    className: '',
 };
 
 export default Img;
