@@ -4,29 +4,19 @@ import './style.scss'
 
 class Loading extends PureComponent{
     state = {
-        petalNum: 12,
-        petalWidth: 3,
-        petalHeight: 10,
-        time: 0.09,
-        petalBorderRadius: '50%',
+        petalNum: 24,
+        petalWidth: 4,
+        petalHeight: 18,
+        time: 1,
+        petalBorderRadius: 2,
     };
     render(){
-        // const size = parseInt(Math.random()*100);
-        // const state = {
-        //     petalWidth: size,
-        //     petalHeight: size,
-        //     petalNum: size,
-
-        // };
         return(
             <div id="loading">
                 <div className="wrapper">
                     <Flower {...this.state}/>
-                    <div className="loading-text">{this.props.text}</div>
+                    {!!this.props.text ? <div className="loading-text">{this.props.text}</div> : ''}
                 </div>
-                {/* <button 
-                    style={{width: '200px',height: '60px', position: 'absolute', bottom: '0'}} 
-                    onClick={() => {this.setState(state)}}>change</button> */}
             </div>
         )
     }
