@@ -28,11 +28,9 @@ let imgs = ["http://a3.topitme.com/3/73/72/1118264985e1172733o.jpg"
 ,"http://img.25pp.com/uploadfile/bizhi/ipad3/2015/0205/20150205091238360_ipad3.jpg"];
 
 
-// let src = 'http://img.zcool.cn/community/0159fa5944bcd3a8012193a34b762d.jpg@2o.jpg';
 ReactDOM.render(
 	<div>
-        {imgs.map((src, index)=><Img className='wrapper' key={index} lazy type='all' src={src}/>)}
-        {/*<Test className='wrapper' lazy src='http://img.dwstatic.com/ow/1603/321664812092/1457711198415.jpg'/>*/}
+        {imgs.map((src, index)=><Img className='wrapper' key={index} lazy type='part' src={src}/>)}
     </div>,
     rootElement
 );
