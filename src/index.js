@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom'
 import './style/core/base.scss'
 import './style.scss'
 import Img from './components/Img'
+import Slide from './components/Slide'
 
 const rootElement = document.getElementById('app');
 
-let imgs = ["http://a3.topitme.com/3/73/72/1118264985e1172733o.jpg"
-,"http://pic1.win4000.com/wallpaper/8/58f48e128666f.jpg"
+let imgs = [
+"http://pic1.win4000.com/wallpaper/8/58f48e128666f.jpg"
 ,"http://pic1.win4000.com/wallpaper/6/57d275c0abf74.jpg"
 ,"http://www.vsochina.com/data/uploads/resource/batch/2/110174992053a276b26bad4.jpg"
 ,"http://pic.jj20.com/up/allimg/1011/06101G43R5/1F610143R5-6.jpg"
@@ -27,10 +28,11 @@ let imgs = ["http://a3.topitme.com/3/73/72/1118264985e1172733o.jpg"
 ,"http://a.hiphotos.baidu.com/baike/c0%3Dbaike52%2C5%2C5%2C52%2C17/sign=5ca33fe35edf8db1a8237436684ab631/3812b31bb051f81986db3d31dab44aed2f73e7ca.jpg"
 ,"http://img.25pp.com/uploadfile/bizhi/ipad3/2015/0205/20150205091238360_ipad3.jpg"];
 
+const sources = imgs.map(item=><Img className='img' src={item} lazy/>);
 
 ReactDOM.render(
 	<div>
-        {imgs.map((src, index)=><Img className='wrapper' key={index} lazy type='part' src={src}/>)}
+        <Slide sources={imgs}/>
     </div>,
     rootElement
 );

@@ -37,3 +37,4 @@ export const getObjectType = obj => Object.prototype.toString.call(obj).slice(8)
 
 // 生成id
 export const makeUniqueID = (randomLength = 8) => Number(Math.random().toString().substr(3,randomLength) + Date.now()).toString(36);
+

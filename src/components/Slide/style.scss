@@ -1,0 +1,17 @@
+#slide{
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  .slide-group{
+    display: flex;
+    min-width: 100%;
+  }
+  .slide-item{
+    width: 100rem;
+  }
+
+  .img{
+    width: 10rem;
+    min-height: 300px;
+  }
+}

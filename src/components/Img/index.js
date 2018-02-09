@@ -11,6 +11,7 @@ let isListen = false;
 let lazyLoadImgs = [];
 // 全局懒加载控制器，调用所用img组件中的图片加载控制器，只注册一个全局监听的方法做优化
 const lazyLoadController = () => {
+    console.log('lazyLoadController');
     let len = lazyLoadImgs.length;
 
     for(let i =0;i < len; ){
