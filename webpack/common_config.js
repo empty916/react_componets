@@ -98,7 +98,7 @@ module.exports = {
                             plugins: [
                                 ["transform-runtime", {
                                     "helpers": false,
-                                    "polyfill": true,
+                                    "polyfill": false,
                                 }],	//运行时编译
                                 'add-module-exports',
                                 "transform-decorators-legacy"

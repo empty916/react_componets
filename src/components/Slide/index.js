@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react'
 import BetterScroll from 'better-scroll'
-import Img from '../Img'
+import Img, { lazyLoadController } from '../Img'
 import './style.scss'
-let evObj = document.createEvent('HTMLEvents');
-evObj.initEvent('scroll',true,false);
 
 class Slide extends PureComponent{
     constructor(props) {
@@ -30,9 +28,7 @@ class Slide extends PureComponent{
             // click: this.click
         });
 
-        this.bs.on('scroll',() => {
-            this.refs.slide.dispatchEvent(evObj);
-        });
+        this.bs.on('scroll', lazyLoadController);
     }
 
 

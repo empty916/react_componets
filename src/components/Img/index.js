@@ -10,23 +10,52 @@ let isListen = false;
 //使用数组缓存img 加载控制器，在遍历的时候更快
 let lazyLoadImgs = [];
 // 全局懒加载控制器，调用所用img组件中的图片加载控制器，只注册一个全局监听的方法做优化
-const lazyLoadController = () => {
-    console.log('lazyLoadController');
+// 因为默认监听window scroll 事件，但是会有其他的情况也会造成视图变化，所以将控制器给开发者控制
+let timer = null;
+export const lazyLoadController = () => {
     let len = lazyLoadImgs.length;
+    let controllImgLoad = () => {
+        //当前视界图优先加载
+        for(let i =0;i < len; ){
+            lazyLoadImgs[i].fun(false,1);
+            i+1 < len && lazyLoadImgs[i+1].fun(false,1);
+            i+2 < len && lazyLoadImgs[i+2].fun(false,1);
+            i+=3;
+        }
+        //1.5倍视界图次优先加载
+        for(let i =0;i < len; ){
+            lazyLoadImgs[i].fun(1.5);
+            i+1 < len && lazyLoadImgs[i+1].fun(false,1.5);
+            i+2 < len && lazyLoadImgs[i+2].fun(false,1.5);
+            i+=3;
+        }
+        //2倍视界图再次优先加载
+        for(let i =0;i < len; ){
+            lazyLoadImgs[i].fun(1.5);
+            i+1 < len && lazyLoadImgs[i+1].fun(false,2);
+            i+2 < len && lazyLoadImgs[i+2].fun(false,2);
+            i+=3;
+        }
+    };
 
-    for(let i =0;i < len; ){
-        lazyLoadImgs[i].fun();
-        i+1 < len && lazyLoadImgs[i+1].fun();
-        i+2 < len && lazyLoadImgs[i+2].fun();
-        i+=3;
+    if(!!timer) clearTimeout(timer);
+    timer = setTimeout(controllImgLoad, 20);
+
+    if(len === 0 && isListen === true) toggleListener('remove');
+};
+
+const toggleListener = type => {
+    if(type === 'add'){
+        isListen = true;
+        window.addEventListener('scroll', lazyLoadController, false);
+        window.addEventListener('resize', lazyLoadController, false);
     }
-    if(len === 0 && isListen === true){
+    if(type === 'remove'){
         window.removeEventListener('scroll', lazyLoadController, false);
         window.removeEventListener('resize', lazyLoadController, false);
         isListen = false;
     }
 };
-
 class Img extends PureComponent{
     constructor(){
         super();
@@ -50,11 +79,7 @@ class Img extends PureComponent{
                 id: this.id,
                 fun: this.lazyLoadController,
             });
-            if(!isListen){
-                isListen = true;
-                window.addEventListener('scroll', lazyLoadController, false);
-                window.addEventListener('resize', lazyLoadController, false);
-            }
+            if(!isListen) toggleListener('add');
         }
     }
     // 释放缓存,图片加载完成，组件被销毁时调用
@@ -97,13 +122,13 @@ class Img extends PureComponent{
         console.log('img load error');
     }
     // 图片懒加载控制器
-    lazyLoadController(el){
-        if(!this.props.lazy) return;
+    lazyLoadController(el, ratio = 1){
+        if(!this.props.lazy || !!this.img) return;
         if(getObjectType(el) !== 'HTMLDivElement' && !this.el) return;
         if(getObjectType(el) !== 'HTMLDivElement' && !!this.el) el = this.el;
         else if(!!el && !this.el) this.el = el;
         // 当元素在视界中时，加载图片
-        if(!!el && isInViewport(el, this.props.type) && !this.img) this.doLoad();
+        if(!!el && isInViewport(el, ratio)) this.doLoad();
     }
     componentWillUnmount(){
         this.releaseImg();
