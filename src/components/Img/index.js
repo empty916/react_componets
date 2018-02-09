@@ -91,6 +91,7 @@ class Img extends PureComponent{
         this.releaseImg();
         this.setState({
             isLoadingError: true,
+            loading: false,
         });
         console.log('img load error');
     }
@@ -113,7 +114,11 @@ class Img extends PureComponent{
         } = this.props;
         return (this.state.loading) ? (
             <div className={`img ${className}`} ref={this.lazyLoadController}>
-                <Flower size={50} petalNum={12} petalBorderRadius={2} time={1}/>
+                <Flower
+                    size={50}
+                    petalNum={12}
+                    petalBorderRadius={2}
+                    time={1}/>
             </div>
         ) : <img src={src} className={className}/>
     }
