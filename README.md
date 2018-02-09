@@ -3,7 +3,8 @@
 react 组件库 
 lib-flexible适配方案
 sass预处理器
-依赖better-scroll
+部分依赖better-scroll，会在组件中说明
+
 
 ## 组件目录
 
