@@ -50,13 +50,14 @@ class Img extends PureComponent{
     doLoad(){
         // 既然已经开始加载了，就从懒加载队列中删除
         removeImgById(this.id);
-        let img = new Image();
-        img.src = this.props.src;
-        img.onload = this.onLoad;
-        img.onerror = this.loadErr;
+        this.setState({ loading: 1});
+        // let img = new Image();
+        // img.src = this.props.src;
+        // img.onload = this.onLoad;
+        // img.onerror = this.loadErr;
         //无须将img 放到state中，因为img跟页面没关系，而且加入state会多一次渲染
         // this.img = img;
-        this.setState({img})
+
     }
     // 图片加载完成后的操作
     onLoad() {
@@ -76,7 +77,7 @@ class Img extends PureComponent{
     }
     // 图片懒加载控制器
     lazyLoadController(el, ratio = 1){
-        if(!this.props.lazy || !!this.state.img) return;
+        if(!this.props.lazy || this.state.loading === 1) return;
         if(getObjectType(el) !== 'HTMLDivElement' && !this.el) return;
         if(getObjectType(el) !== 'HTMLDivElement' && !!this.el) el = this.el;
         else if(!!el && !this.el) this.el = el;
@@ -87,8 +88,15 @@ class Img extends PureComponent{
         //1 + step * 2倍视界图次优先加载
         // ...
         let value = true;
-        if(!!el && pos === true) this.doLoad();
-        if(!!el && pos <= 2.1 && pos > 0) setTimeout(this.doLoad, pos+15);
+        if(!!el && pos === true) {
+            this.doLoad();
+            value = true;
+        }
+        if(!!el && pos <= 2.1 && pos > 0){
+            value = 2;
+            // this.doLoad();
+            setTimeout(this.doLoad, pos+15);
+        }
         // 如果当前图片在4屏以内，加入缓冲区
         if(pos > 2.1) value = true;
         if(pos <= 0) value = false;
@@ -100,19 +108,37 @@ class Img extends PureComponent{
     render(){
         const { 
             src,
+            index,
             className,
         } = this.props;
-        return (this.state.loading) ? (
-            <div data-id={this.id} className={`img ${className}`} ref={this.lazyLoadController}>
+        let hasImg = [
+            <div data-index={index} data-id={this.id} className={`img ${className}`} ref={this.lazyLoadController}>
                 {
-                    !!this.state.img ? <Flower
+                    this.state.loading === 1 ? <Flower
                         size={50}
                         petalNum={12}
                         petalBorderRadius={2}
                         time={1}/> : ''
                 }
             </div>
-        ) : <img src={src} className={className}/>
+        ];
+        if(this.state.loading === 1){
+            hasImg.push(<img style={{display: 'none'}} src={src} className={className} onLoad={this.onLoad} onError={this.loadErr}/>);
+        } else if(this.state.loading === false){
+            hasImg = <img src={src} className={className} onLoad={this.onLoad} onError={this.loadErr}/>;
+        }
+        return hasImg;
+        // return (this.state.loading) ? (
+        //     <div data-id={this.id} className={`img ${className}`} ref={this.lazyLoadController}>
+        //         {
+        //             !!this.state.img ? <Flower
+        //                 size={50}
+        //                 petalNum={12}
+        //                 petalBorderRadius={2}
+        //                 time={1}/> : ''
+        //         }
+        //     </div>
+        // ) : <img src={src} className={className} onLoad={this.onLoad} onError={this.loadErr}/>
     }
 }
 

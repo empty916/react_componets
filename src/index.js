@@ -8,7 +8,7 @@ import imgs from './data/img'
 
 const rootElement = document.getElementById('app');
 
-const sources = imgs.slice(0).map(item=><Img className='img' src={item} lazy/>);
+const sources = imgs.slice(0).map((item, index)=><Img className='img' index={index} src={item} lazy/>);
 console.log(imgs.length);
 ReactDOM.render(
 	<div>

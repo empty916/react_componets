@@ -46,8 +46,8 @@ let doAdd = arr => {
     arr = arr.slice();
     for(let i = 0; i < arr.length; i++){
         let img = arr[i];
-        arr[i] && arr[i].fun(false, 0.5);
-        if(img.isNear && idMap[img.id] === 1){
+        img && img.fun(false, 0.5);
+        if(!!img.isNear && idMap[img.id] === 1){
             imgBuffer.push(img);
             idMap[img.id]++;
         }
@@ -55,21 +55,46 @@ let doAdd = arr => {
     }
     console.log('time cost ===> ' + (Date.now() - start))
 };
+const creatInViewImgPos = arr => {
+    let start = Date.now();
+    for(let i = 0; i < arr.length; i++){
+        let img = arr[i];
+        img && img.fun(false, 0.5);
+        if(img.isNear === true || img.isNear === 1) {
+            console.log('in view img.id ======> ', img.id);
+            console.log(`================creatInViewImgPos cost ${ Date.now() - start }================`);
+            return img.id;
+        }
+    }
+};
 /**
  * 图片缓冲区的图片要没了的时候调用
  * 添加缓冲图片
  */
-const addBufferImg = () => {
-    imgBuffer = imgBuffer.filter(img => img.isNear);
-    if(imgBuffer.length === 0) {
-        let index = lazyLoadImgs.findIndex(img => img.isNear);
-        if(index > -1){
-            imgBuffer.push(lazyLoadImgs[index]);
-            idMap[lazyLoadImgs[index].id] ++;
-        }
+const addBufferImg = id => {
+
+    // 找到视觉中心的 索引，id
+    let index = lazyLoadImgs.findIndex(img => img.id === id);
+    if(index === -1){
+        index = lazyLoadImgs.findIndex(img => img.isNear === true || img.isNear === 1 || img.isNear === 2);
+        id = lazyLoadImgs[index].id;
     }
+
+
+    if(imgBuffer.findIndex(img => img.id === id) === -1){
+        for(let i = 0; i < imgBuffer.length; i++) {
+            idMap[imgBuffer[i].id] = 1;
+        }
+        imgBuffer = [];
+    }
+
+    if(imgBuffer.length === 0) {
+        imgBuffer.push(lazyLoadImgs[index]);
+        idMap[lazyLoadImgs[index].id] = 2;
+    }
+
     if(imgBuffer.length <= bufferLen / 2 && imgBuffer.length) {
-        let index = lazyLoadImgs.findIndex(img => imgBuffer[0].id === img.id);
+        // let index = lazyLoadImgs.findIndex(img => imgBuffer[0].id === img.id);
         let startIndex = Math.max(0, index - 10);
         let endIndex = Math.min(lazyLoadImgs.length, index + 10);
         let secondBuffer = lazyLoadImgs.slice(startIndex, endIndex);
@@ -80,10 +105,18 @@ const addBufferImg = () => {
         doAdd(lazyLoadImgs);
     }
 };
-const controlImgLoad = () => {
+let tt = 0;
+let ttt = null;
+const controlImgLoad = (centerImgId) => {
+    tt++;
+    if(!!ttt) clearTimeout(ttt);
+    ttt = setTimeout(() => {
+        console.log('frequency>>>>>>>>>>', tt);
+        tt = 0;
+    }, 20);
+
     if(cacling) return;
-    addBufferImg();
-    console.log(imgBuffer);
+    addBufferImg(centerImgId);
     let arr = (imgBuffer.length >= 1 ? imgBuffer : lazyLoadImgs).slice();
     let len = arr.length;
     console.log(imgBuffer.length === arr.length);
@@ -103,8 +136,10 @@ const controlImgLoad = () => {
 
 export const lazyLoadController = () => {
     let len = lazyLoadImgs.length;
+    let centerImgId = creatInViewImgPos(lazyLoadImgs);
+    // controlImgLoad();
     if(!!timer) clearTimeout(timer);
-    timer = setTimeout(controlImgLoad, 16);
+    timer = setTimeout(() => controlImgLoad(centerImgId), 16);
     if(len === 0 && isListen === true) toggleListener('remove');
 };
 
