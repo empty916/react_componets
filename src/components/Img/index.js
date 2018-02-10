@@ -76,7 +76,6 @@ class Img extends PureComponent{
     }
     // 图片懒加载控制器
     lazyLoadController(el, ratio = 1){
-        console.log('lazyLoadController');
         if(!this.props.lazy || !!this.state.img) return;
         if(getObjectType(el) !== 'HTMLDivElement' && !this.el) return;
         if(getObjectType(el) !== 'HTMLDivElement' && !!this.el) el = this.el;

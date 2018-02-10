@@ -7,7 +7,6 @@ export let lazyLoadImgs = [];
 let idMap = {};
 let imgBuffer = [];
 let bufferLen = 10;
-let useBuffer = 30;
 
 export const addImg = img => {
     if(!!idMap[img.id]) return; // 不重复添加
@@ -33,12 +32,6 @@ export const signImgIsNear = (id, value) => {
 // 因为默认监听window scroll 事件，但是会有其他的情况也会造成视图变化，所以将控制器给开发者控制
 let timer = null;
 
-let config = {
-    startRatio: 0.5, // 初始视界倍率
-    step: 0.5, // 视界倍率增长步长
-    limitRatio: 2, // 最大视界倍率
-    frequency: 16, // 监听事件函数执行频率
-};
 let cacling = false;
 /**
  * 配置懒加载控制器，
@@ -48,6 +41,8 @@ export const configController = (new_config) => {
     config = {...config, ...new_config}
 };
 let doAdd = arr => {
+    let start = Date.now();
+    console.log('arr.length', arr.length);
     arr = arr.slice();
     for(let i = 0; i < arr.length; i++){
         let img = arr[i];
@@ -58,6 +53,7 @@ let doAdd = arr => {
         }
         if(imgBuffer.length >= bufferLen) break;
     }
+    console.log('time cost ===> ' + (Date.now() - start))
 };
 /**
  * 图片缓冲区的图片要没了的时候调用
@@ -65,25 +61,32 @@ let doAdd = arr => {
  */
 const addBufferImg = () => {
     imgBuffer = imgBuffer.filter(img => img.isNear);
-
-    if(imgBuffer.length <= 1 && imgBuffer.length) {
+    if(imgBuffer.length === 0) {
+        let index = lazyLoadImgs.findIndex(img => img.isNear);
+        if(index > -1){
+            imgBuffer.push(lazyLoadImgs[index]);
+            idMap[lazyLoadImgs[index].id] ++;
+        }
+    }
+    if(imgBuffer.length <= bufferLen / 2 && imgBuffer.length) {
         let index = lazyLoadImgs.findIndex(img => imgBuffer[0].id === img.id);
         let startIndex = Math.max(0, index - 10);
         let endIndex = Math.min(lazyLoadImgs.length, index + 10);
-        let secendBuffer = lazyLoadImgs.slice(startIndex, endIndex);
-        doAdd(secendBuffer);
+        let secondBuffer = lazyLoadImgs.slice(startIndex, endIndex);
+        doAdd(secondBuffer);
     }
     if(imgBuffer.length <= 1) {
+        console.log('addBufferImg ===> lazyLoadImgs');
         doAdd(lazyLoadImgs);
     }
 };
 const controlImgLoad = () => {
     if(cacling) return;
     addBufferImg();
-    console.log(imgBuffer, lazyLoadImgs);
+    console.log(imgBuffer);
     let arr = (imgBuffer.length >= 1 ? imgBuffer : lazyLoadImgs).slice();
     let len = arr.length;
-
+    console.log(imgBuffer.length === arr.length);
     for(let i =0; i < len; i++){
         arr[i] && arr[i].fun(false, 0.5);
         if( !!arr[i].isNear &&
@@ -101,7 +104,7 @@ const controlImgLoad = () => {
 export const lazyLoadController = () => {
     let len = lazyLoadImgs.length;
     if(!!timer) clearTimeout(timer);
-    timer = setTimeout(controlImgLoad, config.frequency);
+    timer = setTimeout(controlImgLoad, 16);
     if(len === 0 && isListen === true) toggleListener('remove');
 };
 
