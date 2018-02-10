@@ -1,55 +1,10 @@
 import React, { PureComponent } from 'react'
 import { isInViewport, getObjectType, makeUniqueID } from '../../utils'
 import Flower from '../Flower'
-
+import { isListen, toggleListener, lazyLoadImgs, removeImgById, signImgIsNear, addImg } from './lazyLoadController'
+export { lazyLoadController } from './lazyLoadController'
 import './style.scss'
 import defImg from '../../images/start_up_lady.png'
-
-// 全局懒加载监听是否开启
-let isListen = false;
-//使用数组缓存img 加载控制器，在遍历的时候更快
-let lazyLoadImgs = [];
-// 全局懒加载控制器，调用所用img组件中的图片加载控制器，只注册一个全局监听的方法做优化
-// 因为默认监听window scroll 事件，但是会有其他的情况也会造成视图变化，所以将控制器给开发者控制
-let timer = null;
-export const lazyLoadController = () => {
-    let len = lazyLoadImgs.length;
-    let step = 0.4;
-    let limitRadio = 2;
-
-    let controllImgLoad = () => {
-        //1倍视界图优先加载
-        //1 + step倍视界图次优先加载
-        //1 + step * 2倍视界图次优先加载
-        // ...
-        for(let baseRatio = 1; baseRatio < limitRadio; baseRatio += step){
-            for(let i =0; i < len;){
-                lazyLoadImgs[i].fun(false, baseRatio);
-                i+1 < len && lazyLoadImgs[i+1].fun(false, baseRatio);
-                i+2 < len && lazyLoadImgs[i+2].fun(false, baseRatio);
-                i+=3;
-            }
-        }
-    };
-    if(!!timer) clearTimeout(timer);
-    timer = setTimeout(controllImgLoad, 20);
-
-    if(len === 0 && isListen === true) toggleListener('remove');
-};
-
-const toggleListener = type => {
-    if(type === 'add'){
-        isListen = true;
-        window.addEventListener('scroll', lazyLoadController, false);
-        window.addEventListener('resize', lazyLoadController, false);
-        setTimeout(lazyLoadController, 100);
-    }
-    if(type === 'remove'){
-        window.removeEventListener('scroll', lazyLoadController, false);
-        window.removeEventListener('resize', lazyLoadController, false);
-        isListen = false;
-    }
-};
 class Img extends PureComponent{
     constructor(){
         super();
@@ -69,8 +24,9 @@ class Img extends PureComponent{
         if(!this.props.lazy) {
             this.doLoad();
         } else {
-            lazyLoadImgs.push({
+            addImg({
                 id: this.id,
+                isNear: false,
                 fun: this.lazyLoadController,
             });
             if(!isListen) toggleListener('add');
@@ -78,11 +34,7 @@ class Img extends PureComponent{
     }
     // 释放缓存,图片加载完成，组件被销毁时调用
     releaseImg() {
-        for(let i =0;i<lazyLoadImgs.length; i++){
-            if(lazyLoadImgs[i].id === this.id) {
-                lazyLoadImgs.splice(i,1);
-            }
-        }
+        removeImgById(this.id);
         let { img } = this;
         img.onload = null;
         img.onerror = null;
@@ -92,12 +44,15 @@ class Img extends PureComponent{
     }
     //执行图片加载操作
     doLoad(){
+        // 既然已经开始加载了，就从懒加载队列中删除
+        removeImgById(this.id);
         let img = new Image();
         img.src = this.props.src;
         img.onload = this.onLoad;
         img.onerror = this.loadErr;
         //无须将img 放到state中，因为img跟页面没关系，而且加入state会多一次渲染
         this.img = img;
+
     }
     // 图片加载完成后的操作
     onLoad() {
@@ -122,7 +77,11 @@ class Img extends PureComponent{
         if(getObjectType(el) !== 'HTMLDivElement' && !!this.el) el = this.el;
         else if(!!el && !this.el) this.el = el;
         // 当元素在视界中时，加载图片
-        if(!!el && isInViewport(el, ratio)) this.doLoad();
+        let pos = isInViewport(el, ratio);
+        if(!!el && pos === 1) this.doLoad();
+        // 如果当前图片在4屏以内，可以先处理
+        if(pos > 1) signImgIsNear(this.id, true);
+        if(pos === 0) signImgIsNear(this.id, false);
     }
     componentWillUnmount(){
         this.releaseImg();
@@ -133,7 +92,7 @@ class Img extends PureComponent{
             className,
         } = this.props;
         return (this.state.loading) ? (
-            <div className={`img ${className}`} ref={this.lazyLoadController}>
+            <div data-id={this.id} className={`img ${className}`} ref={this.lazyLoadController}>
                 <Flower
                     size={50}
                     petalNum={12}
