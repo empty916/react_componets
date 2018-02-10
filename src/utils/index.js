@@ -1,9 +1,8 @@
 /**
  * 判断dom元素是否在视界中
  * @param {*} el dom元素
- * @param {*} ratio 判断在几倍视界中
  */
-export const isInViewport = (el, ratio) => {
+export const isInViewport = el => {
     if(Object.prototype.toString.call(el) !== '[object HTMLDivElement]') return;
     const {
         top,
@@ -16,7 +15,6 @@ export const isInViewport = (el, ratio) => {
         innerWidth
     } = window;
 
-    if(typeof ratio !== 'number' || ratio <=0) ratio = 1;
 
     let topLimit = 0;
     let bottomLimit = innerHeight;
@@ -36,22 +34,18 @@ export const isInViewport = (el, ratio) => {
         left >= leftLimit &&
         right <= rightLimit
     );
-    if(ratio >= 1){
-        calcLimit(ratio);
-    } else {
-        bottomLimit = ratio * innerHeight;
-    }
-    if(isInLimitView()){
-        return 1;
-    } else {
-        calcLimit(4);
-        if(isInLimitView()){
-            // 在4屏以内就返回4了
-            return 4;
-        }
-        return 0;
 
-    }
+    bottomLimit = 0.5 * innerHeight;
+    if(isInLimitView())return true;
+    calcLimit(1);
+    if(isInLimitView())return 1;
+    calcLimit(1.6);
+    if(isInLimitView())return 1.6;
+    calcLimit(2.1);
+    if(isInLimitView())return 2.1;
+    calcLimit(5);
+    if(isInLimitView())return 5;
+    return -1;
 
 };
 

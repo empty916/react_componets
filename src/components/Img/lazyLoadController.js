@@ -51,25 +51,28 @@ export const configController = (new_config) => {
 const controlImgLoad = () => {
     if(cacling) return;
     imgBuffer = imgBuffer.filter(img => img.isNear);
-    console.log(imgBuffer, lazyLoadImgs);
-    let arr = (imgBuffer.length >= 1 ? imgBuffer : lazyLoadImgs).slice();
-    console.log(lazyLoadImgs.length, imgBuffer.length, bufferLen);
-
-    let len = arr.length;
-    //1倍视界图优先加载
-    //1 + step倍视界图次优先加载
-    //1 + step * 2倍视界图次优先加载
-    // ...
-    for(let baseRatio = config.startRatio; baseRatio <= config.limitRatio; baseRatio += config.step){
-        for(let i =0; i < len; i++){
-            arr[i] && arr[i].fun(false, baseRatio);
-            if( arr[i].isNear &&
-                imgBuffer.length < bufferLen &&
-                idMap[arr[i].id] === 1) { // 不重复添加
-
-                idMap[arr[i].id]++;
-                imgBuffer.push(arr[i]);
+    if(imgBuffer.length === 0) {
+        for(let i = 0; i<lazyLoadImgs.length; i++){
+            let img = lazyLoadImgs[i];
+            if(img.isNear && idMap[img.id] === 1) {
+                idMap[img.id]++;
+                imgBuffer.push(img);
             }
+            if(imgBuffer.length >= bufferLen) break;
+        }
+    }
+
+    let arr = (imgBuffer.length >= 1 ? imgBuffer : lazyLoadImgs).slice();
+    let len = arr.length;
+
+    for(let i =0; i < len; i++){
+        arr[i] && arr[i].fun(false, 0.5);
+        if( !!arr[i].isNear &&
+            imgBuffer.length < bufferLen &&
+            idMap[arr[i].id] === 1) { // 不重复添加
+
+            idMap[arr[i].id]++;
+            imgBuffer.push(arr[i]);
         }
     }
     timer = null;

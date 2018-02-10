@@ -35,12 +35,14 @@ class Img extends PureComponent{
     // 释放缓存,图片加载完成，组件被销毁时调用
     releaseImg() {
         removeImgById(this.id);
+        this.el = null;
+        if(!this.img) return;
         let { img } = this;
         img.onload = null;
         img.onerror = null;
         img = null;
-        this.img = img;
-        this.el = null;
+        this.img = null;
+
     }
     //执行图片加载操作
     doLoad(){
@@ -78,10 +80,15 @@ class Img extends PureComponent{
         else if(!!el && !this.el) this.el = el;
         // 当元素在视界中时，加载图片
         let pos = isInViewport(el, ratio);
-        if(!!el && pos === 1) this.doLoad();
-        // 如果当前图片在4屏以内，可以先处理
-        if(pos > 1) signImgIsNear(this.id, true);
-        if(pos === 0) signImgIsNear(this.id, false);
+        //0.5倍视界图优先加载
+        //1 + step倍视界图次优先加载
+        //1 + step * 2倍视界图次优先加载
+        // ...
+        if(!!el && pos === true) this.doLoad();
+        if(!!el && pos <= 2.1 && pos > 0) setTimeout(this.doLoad, pos+15);
+        // 如果当前图片在4屏以内，加入缓冲区
+        if(pos > 2.1) signImgIsNear(this.id, true);
+        if(pos <= 0) signImgIsNear(this.id, false);
     }
     componentWillUnmount(){
         this.releaseImg();
