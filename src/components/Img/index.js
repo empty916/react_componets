@@ -16,6 +16,7 @@ class Img extends PureComponent{
         this.lazyLoadController = this.lazyLoadController.bind(this);
         
         this.state = {
+            img: null,
             loading: true,
             isLoadingError: false,
         }
@@ -36,12 +37,13 @@ class Img extends PureComponent{
     releaseImg() {
         removeImgById(this.id);
         this.el = null;
-        if(!this.img) return;
-        let { img } = this;
+        if(!this.state.img) return;
+        let { img } = this.state;
         img.onload = null;
         img.onerror = null;
         img = null;
-        this.img = null;
+        this.setState({img});
+        // this.img = null;
 
     }
     //执行图片加载操作
@@ -53,8 +55,8 @@ class Img extends PureComponent{
         img.onload = this.onLoad;
         img.onerror = this.loadErr;
         //无须将img 放到state中，因为img跟页面没关系，而且加入state会多一次渲染
-        this.img = img;
-
+        // this.img = img;
+        this.setState({img})
     }
     // 图片加载完成后的操作
     onLoad() {
@@ -74,7 +76,8 @@ class Img extends PureComponent{
     }
     // 图片懒加载控制器
     lazyLoadController(el, ratio = 1){
-        if(!this.props.lazy || !!this.img) return;
+        console.log('lazyLoadController');
+        if(!this.props.lazy || !!this.state.img) return;
         if(getObjectType(el) !== 'HTMLDivElement' && !this.el) return;
         if(getObjectType(el) !== 'HTMLDivElement' && !!this.el) el = this.el;
         else if(!!el && !this.el) this.el = el;
@@ -84,11 +87,13 @@ class Img extends PureComponent{
         //1 + step倍视界图次优先加载
         //1 + step * 2倍视界图次优先加载
         // ...
+        let value = true;
         if(!!el && pos === true) this.doLoad();
         if(!!el && pos <= 2.1 && pos > 0) setTimeout(this.doLoad, pos+15);
         // 如果当前图片在4屏以内，加入缓冲区
-        if(pos > 2.1) signImgIsNear(this.id, true);
-        if(pos <= 0) signImgIsNear(this.id, false);
+        if(pos > 2.1) value = true;
+        if(pos <= 0) value = false;
+        signImgIsNear(this.id, value);
     }
     componentWillUnmount(){
         this.releaseImg();
@@ -100,11 +105,13 @@ class Img extends PureComponent{
         } = this.props;
         return (this.state.loading) ? (
             <div data-id={this.id} className={`img ${className}`} ref={this.lazyLoadController}>
-                <Flower
-                    size={50}
-                    petalNum={12}
-                    petalBorderRadius={2}
-                    time={1}/>
+                {
+                    !!this.state.img ? <Flower
+                        size={50}
+                        petalNum={12}
+                        petalBorderRadius={2}
+                        time={1}/> : ''
+                }
             </div>
         ) : <img src={src} className={className}/>
     }

@@ -47,21 +47,40 @@ let cacling = false;
 export const configController = (new_config) => {
     config = {...config, ...new_config}
 };
+let doAdd = arr => {
+    arr = arr.slice();
+    for(let i = 0; i < arr.length; i++){
+        let img = arr[i];
+        arr[i] && arr[i].fun(false, 0.5);
+        if(img.isNear && idMap[img.id] === 1){
+            imgBuffer.push(img);
+            idMap[img.id]++;
+        }
+        if(imgBuffer.length >= bufferLen) break;
+    }
+};
+/**
+ * 图片缓冲区的图片要没了的时候调用
+ * 添加缓冲图片
+ */
+const addBufferImg = () => {
+    imgBuffer = imgBuffer.filter(img => img.isNear);
 
+    if(imgBuffer.length <= 1 && imgBuffer.length) {
+        let index = lazyLoadImgs.findIndex(img => imgBuffer[0].id === img.id);
+        let startIndex = Math.max(0, index - 10);
+        let endIndex = Math.min(lazyLoadImgs.length, index + 10);
+        let secendBuffer = lazyLoadImgs.slice(startIndex, endIndex);
+        doAdd(secendBuffer);
+    }
+    if(imgBuffer.length <= 1) {
+        doAdd(lazyLoadImgs);
+    }
+};
 const controlImgLoad = () => {
     if(cacling) return;
-    imgBuffer = imgBuffer.filter(img => img.isNear);
-    if(imgBuffer.length === 0) {
-        for(let i = 0; i<lazyLoadImgs.length; i++){
-            let img = lazyLoadImgs[i];
-            if(img.isNear && idMap[img.id] === 1) {
-                idMap[img.id]++;
-                imgBuffer.push(img);
-            }
-            if(imgBuffer.length >= bufferLen) break;
-        }
-    }
-
+    addBufferImg();
+    console.log(imgBuffer, lazyLoadImgs);
     let arr = (imgBuffer.length >= 1 ? imgBuffer : lazyLoadImgs).slice();
     let len = arr.length;
 
@@ -91,7 +110,7 @@ export const toggleListener = type => {
         isListen = true;
         window.addEventListener('scroll', lazyLoadController, false);
         window.addEventListener('resize', lazyLoadController, false);
-        setTimeout(lazyLoadController, 100);
+        setTimeout(lazyLoadController, 16);
     }
     if(type === 'remove'){
         window.removeEventListener('scroll', lazyLoadController, false);
