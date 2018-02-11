@@ -31,14 +31,11 @@ export const signImgIsNear = (id, value) => {
     if(!!img) img.isNear = value;
     if(!!img2) img2.isNear = value;
 };
-// 全局懒加载控制器，调用所用img组件中的图片加载控制器，只注册一个全局监听的方法做优化
-// 因为默认监听window scroll 事件，但是会有其他的情况也会造成视图变化，所以将控制器给开发者控制
-let timer = null;
-
-let cacling = false;
 
 let doAdd = arr => {
+    if(imgBuffer.length > bufferLen) return;
     arr = arr.slice();
+    let isNearSign;
     for(let i = 0; i < arr.length; i++){
         let img = arr[i];
         img && img.fun(false, 0.5);
@@ -46,17 +43,17 @@ let doAdd = arr => {
             imgBuffer.push(img);
             idMap2[img.id] = true;
         }
-        if(imgBuffer.length >= bufferLen) break;
+        if(!!isNearSign && !img.isNear) {
+            let ibl = imgBuffer.length;
+            imgBuffer.splice((ibl - bufferLen) * 0.5 , (ibl + bufferLen) * 0.5);
+            break;
+        }
+        isNearSign = img.isNear;
     }
 };
-// 刷新所有img 位置
-const creatInViewImgPos = arr => arr.slice().forEach(img => img.fun(false, 0.5));
-/**
- * 图片缓冲区的图片要没了的时候调用
- * 添加缓冲图片
- */
-const addBufferImg = () => {
-    // buffer 自我检查
+// buffer 自我检查
+const bufferCheck = () => {
+    console.log('bufferCheck ', imgBuffer);
     imgBuffer = imgBuffer.filter(img => {
         if(!img.isNear) {
             delete idMap2[img.id];
@@ -64,50 +61,84 @@ const addBufferImg = () => {
         }
         return true;
     });
+    console.log('bufferCheck ', imgBuffer);
+};
+/**
+ * 图片缓冲区的图片要没了的时候调用
+ * 添加缓冲图片
+ */
+const addBufferImg = () => {
+    bufferCheck();
+    if(imgBuffer.length > bufferLen) return;
+    // console.log('addBufferImg step 1', imgBuffer);
+    // console.log('addBufferImg step 2', imgBuffer);
     if(!imgBuffer.length){
+        let isNearSign;
         for(let i = 0; i < lazyLoadImgs.length; i++){
             let img = lazyLoadImgs[i];
             if(!img.isNear) {
                 imgBuffer.push(img);
                 idMap2[img.id] = true;
             }
+            if(!!isNearSign && !img.isNear) {
+                let ibl = imgBuffer.length;
+                imgBuffer.splice((ibl - bufferLen) * 0.5 , (ibl + bufferLen) * 0.5);
+                break;
+            }
+            isNearSign = img.isNear;
         }
     }
-    if(imgBuffer.length <= bufferLen / 2 && imgBuffer.length) {
+    // console.log('addBufferImg step 3', imgBuffer);
+    if(imgBuffer.length < bufferLen / 2 && imgBuffer.length) {
         let index = lazyLoadImgs.findIndex(img => imgBuffer[0].id === img.id);
         let startIndex = Math.max(0, index - 10);
         let endIndex = Math.min(lazyLoadImgs.length, index + 10);
         let secondBuffer = lazyLoadImgs.slice(startIndex, endIndex);
+        if(secondBuffer.length >= 10)
+            secondBuffer.slice((secondBuffer.length - bufferLen) / 2, bufferLen);
         doAdd(secondBuffer);
     }
+    // console.log('addBufferImg step 4', imgBuffer);
+    bufferCheck();
+    // console.log('addBufferImg step 5', imgBuffer);
     if(imgBuffer.length <= 1) {
         console.log('addBufferImg ===> lazyLoadImgs');
         doAdd(lazyLoadImgs);
     }
+    // console.log('addBufferImg step 6', imgBuffer);
 };
+// 全局懒加载控制器，调用所用img组件中的图片加载控制器，只注册一个全局监听的方法做优化
+// 因为默认监听window scroll 事件，但是会有其他的情况也会造成视图变化，所以将控制器给开发者控制
+let timer = null;
+let cacling = false;
 const controlImgLoad = () => {
     if(cacling) return;
     addBufferImg();
     let arr = (imgBuffer.length >= 1 ? imgBuffer : lazyLoadImgs).slice();
     let len = arr.length;
-    console.log(imgBuffer.length === arr.length);
     for(let i =0; i < len; i++){
-        arr[i] && arr[i].fun(false, 0.5);
-        if( !!arr[i].isNear &&
+        let _img = arr[i];
+        _img && _img.fun(false, 0.5);
+        if( !!_img.isNear &&
             imgBuffer.length < bufferLen &&
-            !idMap2[arr[i].id]) { // 不重复添加
-
-            idMap2[arr[i].id] = true;
-            imgBuffer.push(arr[i]);
+            !idMap2[_img.id]) { // 不重复添加
+            idMap2[_img.id] = true;
+            imgBuffer.push(_img);
         }
+        // else if(!_img.isNear && !!idMap2[_img.id]) {
+        //     delete idMap2[_img.id];
+        //     let idx = imgBuffer.findIndex(img => img.id === _img.id);
+        //     idx > -1 && imgBuffer.splice(idx, 1);
+        // }
     }
     timer = null;
     cacling =false;
 };
 
+
 export const lazyLoadController = () => {
+    console.log('lazyLoadController step 1', imgBuffer.length);
     let len = lazyLoadImgs.length;
-    // creatInViewImgPos(lazyLoadImgs);
     if(!!timer) clearTimeout(timer);
     timer = setTimeout(controlImgLoad, 16);
     if(len === 0 && isListen === true) toggleListener('remove');
