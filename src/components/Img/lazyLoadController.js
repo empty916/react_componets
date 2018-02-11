@@ -80,13 +80,15 @@ const addBufferImg = () => {
     }
     if(imgBuffer.length) {
         let index = lazyLoadImgs.findIndex(img => imgBuffer[0].id === img.id);
-        let startIndex = Math.max(0, index - 10);
-        let endIndex = Math.min(lazyLoadImgs.length, index + 10);
+        let startIndex = Math.max(0, index - 15);
+        let endIndex = Math.min(lazyLoadImgs.length, index + 15);
         let secondBuffer = lazyLoadImgs.slice(startIndex, endIndex);
+        console.log('use secondBuffer', secondBuffer.length);
         doAdd(secondBuffer);
         return;
     }
     bufferCheck();
+    console.log('use lazyLoadImgs', lazyLoadImgs.length);
     if(imgBuffer.length <= 1) doAdd(lazyLoadImgs);
 };
 // 全局懒加载控制器，调用所用img组件中的图片加载控制器，只注册一个全局监听的方法做优化
@@ -104,8 +106,10 @@ const controlImgLoad = () => {
     timer = null;
     cacling =false;
 };
-
-
+export const doLazyLoad = () => {
+    if(timer) clearTimeout(timer);
+    timer = setTimeout(lazyLoadController, 16);
+}
 export const lazyLoadController = () => {
     let len = lazyLoadImgs.length;
     controlImgLoad();

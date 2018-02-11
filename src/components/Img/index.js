@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { isInViewport, getObjectType, makeUniqueID } from '../../utils'
 import Flower from '../Flower'
-import { isListen, toggleListener, lazyLoadImgs, removeImgById, signImgIsNear, addImg } from './lazyLoadController'
+import { isListen, toggleListener, lazyLoadImgs,doLazyLoad, removeImgById, signImgIsNear, addImg } from './lazyLoadController'
 export { lazyLoadController } from './lazyLoadController'
 import './style.scss'
 import defImg from '../../images/start_up_lady.png'
@@ -45,6 +45,7 @@ class Img extends PureComponent{
     }
     // 图片加载完成后的操作
     onLoad() {
+        doLazyLoad();
         this.releaseImg();
         this.setState({
             loading: false,
