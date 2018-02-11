@@ -6,7 +6,6 @@ export let lazyLoadImgs = [];
 let idMap = {}; // lazyLoadImgs id map
 let idMap2 = {}; // img buffer id map
 let imgBuffer = [];
-let bufferLen = 10;
 
 export const addImg = img => {
     if(!!idMap[img.id]) return; // 不重复添加
@@ -46,7 +45,6 @@ let doAdd = arr => {
         if(!!isNearSign && !img.isNear) break;
         isNearSign = img.isNear;
     }
-
 };
 // buffer 自我检查
 const bufferCheck = () => {
