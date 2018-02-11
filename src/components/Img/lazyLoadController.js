@@ -103,13 +103,13 @@ const controlImgLoad = () => {
     let arr = (imgBuffer.length >= 1 ? imgBuffer : lazyLoadImgs).slice();
     let len = arr.length;
     for(let i =0; i < len; i++) arr[i].fun(false, 0.5);
-    timer = null;
+    // timer = null;
     cacling =false;
 };
 export const doLazyLoad = () => {
     if(timer) clearTimeout(timer);
     timer = setTimeout(lazyLoadController, 16);
-}
+};
 export const lazyLoadController = () => {
     let len = lazyLoadImgs.length;
     controlImgLoad();
