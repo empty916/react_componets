@@ -37,12 +37,12 @@ export const isInViewport = el => {
 
     bottomLimit = 0.5 * innerHeight;
     if(isInLimitView())return true;
-    calcLimit(1);
-    if(isInLimitView())return 1;
-    calcLimit(1.6);
-    if(isInLimitView())return 1.6;
+    calcLimit(1.1);
+    if(isInLimitView())return 1.1;
     calcLimit(2.1);
     if(isInLimitView())return 2.1;
+    calcLimit(3.1);
+    if(isInLimitView())return 3.1;
     calcLimit(5);
     if(isInLimitView())return 5;
     return -1;

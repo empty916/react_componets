@@ -73,12 +73,12 @@ class Img extends PureComponent{
             this.doLoad();
             value = true;
         }
-        if(!!el && pos <= 2.1 && pos > 0){
+        if(!!el && pos <= 3.1 && pos > 0){
             value = 2;
             setTimeout(this.doLoad, pos+15);
         }
         // 如果当前图片在4屏以内，加入缓冲区
-        if(pos > 2.1) value = true;
+        if(pos > 3.1) value = true;
         if(pos <= 0) value = false;
         signImgIsNear(this.id, value);
     }
