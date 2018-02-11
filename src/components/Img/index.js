@@ -16,7 +16,6 @@ class Img extends PureComponent{
         this.lazyLoadController = this.lazyLoadController.bind(this);
         
         this.state = {
-            img: null,
             loading: true,
             isLoadingError: false,
         }

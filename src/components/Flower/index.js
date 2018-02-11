@@ -32,7 +32,7 @@ class Flower extends PureComponent{
     constructor(){
         super();
         this.state = {
-            initOpacity: '0.05', // 菊花 初始|最小 透明度,
+            initOpacity: '0', // 菊花 初始|最小 透明度,
         };
     }
     componentWillMount() {
@@ -73,7 +73,6 @@ class Flower extends PureComponent{
         { // 花的样式
             width: r(this.state.petalHeight * 4),
             height: r(this.state.petalHeight * 4),
-            // transform: `translateX(${r(this.state.petalWidth / -2)})`,
         }
     );
     // 矫正位置用的 因为菊花的中心是transformOrigin往右移了半个花瓣宽度，所以菊花容器要左移等长距离
@@ -82,7 +81,7 @@ class Flower extends PureComponent{
             transform: `translateX(${r(this.state.petalWidth / -2)})`,
         }
     };
-    getPetalStyle = (index) => {
+    getPetalStyle = index => {
         const {
             petalWidth,
             petalHeight,
@@ -94,7 +93,6 @@ class Flower extends PureComponent{
             time,
         } = this.state;
 
-        
         return { // 根据index生成petal样式
             width: r(petalWidth),
             height: r(petalHeight),
@@ -106,8 +104,7 @@ class Flower extends PureComponent{
             transformOrigin: `${r(petalWidth / 2)} ${r(petalHeight * 2)}`,
             transform: `rotate(${index * rotateDeg}deg)`,
             webkitAnimation: `load ${animationDuration}s ease infinite`,
-            animation: `load ${animationDuration}s ease ${time * index}s infinite`,
-            // animationDelay: `${time * index}s`,
+            animation: `load ${animationDuration}s linear ${time * index}s infinite`,
         }
     };
 
