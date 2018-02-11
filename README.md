@@ -40,9 +40,11 @@ sass预处理器
 
 ![img](./src/images/img_ui.png)
 
+支持大量图片渲染 目前测到2000张图片
+
 可配置项
     
     src: '',图片地址
     lazy: false, 是否懒加载
-    type: 'part'|'all' 图片元素部分可见|完全可见时加载图片
     className: '', 图片样式
+    

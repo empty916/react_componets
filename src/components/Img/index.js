@@ -37,27 +37,12 @@ class Img extends PureComponent{
     releaseImg() {
         removeImgById(this.id);
         this.el = null;
-        // if(!this.state.img) return;
-        // let { img } = this.state;
-        // img.onload = null;
-        // img.onerror = null;
-        // img = null;
-        // this.setState({img});
-        // this.img = null;
-
     }
     //执行图片加载操作
     doLoad(){
         // 既然已经开始加载了，就从懒加载队列中删除
         removeImgById(this.id);
         this.setState({ loading: 1});
-        // let img = new Image();
-        // img.src = this.props.src;
-        // img.onload = this.onLoad;
-        // img.onerror = this.loadErr;
-        //无须将img 放到state中，因为img跟页面没关系，而且加入state会多一次渲染
-        // this.img = img;
-
     }
     // 图片加载完成后的操作
     onLoad() {
@@ -83,10 +68,6 @@ class Img extends PureComponent{
         else if(!!el && !this.el) this.el = el;
         // 当元素在视界中时，加载图片
         let pos = isInViewport(el, ratio);
-        //0.5倍视界图优先加载
-        //1 + step倍视界图次优先加载
-        //1 + step * 2倍视界图次优先加载
-        // ...
         let value = true;
         if(!!el && pos === true) {
             this.doLoad();
@@ -94,7 +75,6 @@ class Img extends PureComponent{
         }
         if(!!el && pos <= 2.1 && pos > 0){
             value = 2;
-            // this.doLoad();
             setTimeout(this.doLoad, pos+15);
         }
         // 如果当前图片在4屏以内，加入缓冲区
@@ -108,11 +88,10 @@ class Img extends PureComponent{
     render(){
         const { 
             src,
-            index,
             className,
         } = this.props;
         let hasImg = [
-            <div data-index={index} data-id={this.id} className={`img ${className}`} ref={this.lazyLoadController}>
+            <div className={`img ${className}`} ref={this.lazyLoadController}>
                 {
                     this.state.loading === 1 ? <Flower
                         size={50}
@@ -128,17 +107,6 @@ class Img extends PureComponent{
             hasImg = <img src={src} className={className} onLoad={this.onLoad} onError={this.loadErr}/>;
         }
         return hasImg;
-        // return (this.state.loading) ? (
-        //     <div data-id={this.id} className={`img ${className}`} ref={this.lazyLoadController}>
-        //         {
-        //             !!this.state.img ? <Flower
-        //                 size={50}
-        //                 petalNum={12}
-        //                 petalBorderRadius={2}
-        //                 time={1}/> : ''
-        //         }
-        //     </div>
-        // ) : <img src={src} className={className} onLoad={this.onLoad} onError={this.loadErr}/>
     }
 }
 
