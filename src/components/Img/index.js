@@ -37,12 +37,12 @@ class Img extends PureComponent{
     releaseImg() {
         removeImgById(this.id);
         this.el = null;
-        if(!this.state.img) return;
-        let { img } = this.state;
-        img.onload = null;
-        img.onerror = null;
-        img = null;
-        this.setState({img});
+        // if(!this.state.img) return;
+        // let { img } = this.state;
+        // img.onload = null;
+        // img.onerror = null;
+        // img = null;
+        // this.setState({img});
         // this.img = null;
 
     }

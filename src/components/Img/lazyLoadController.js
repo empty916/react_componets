@@ -3,8 +3,8 @@
 export let isListen = false;
 //使用数组缓存img 加载控制器，在遍历的时候更快
 export let lazyLoadImgs = [];
-// 保证需要处理的图片在30张以内，否则超大量图片的场景会卡死
-let idMap = {};
+let idMap = {}; // lazyLoadImgs id map
+let idMap2 = {}; // img buffer id map
 let imgBuffer = [];
 let bufferLen = 10;
 
@@ -13,9 +13,12 @@ export const addImg = img => {
     idMap[img.id] = 1;
     lazyLoadImgs.push(img);
 };
+
 // 从队列中删除需要懒加载的图片
 export const removeImgById = id => {
-    delete addImg[id];
+    delete idMap[id];
+    delete idMap2[id];
+
     const i1 = lazyLoadImgs.findIndex(img => img.id === id);
     const i2 = imgBuffer.findIndex(img => img.id === id);
     i1 > -1 && lazyLoadImgs.splice(i1, 1);
@@ -33,68 +36,45 @@ export const signImgIsNear = (id, value) => {
 let timer = null;
 
 let cacling = false;
-/**
- * 配置懒加载控制器，
- * @param new_config
- */
-export const configController = (new_config) => {
-    config = {...config, ...new_config}
-};
+
 let doAdd = arr => {
-    let start = Date.now();
-    console.log('arr.length', arr.length);
     arr = arr.slice();
     for(let i = 0; i < arr.length; i++){
         let img = arr[i];
         img && img.fun(false, 0.5);
-        if(!!img.isNear && idMap[img.id] === 1){
+        if(!!img.isNear && !idMap2[img.id]){
             imgBuffer.push(img);
-            idMap[img.id]++;
+            idMap2[img.id] = true;
         }
         if(imgBuffer.length >= bufferLen) break;
     }
-    console.log('time cost ===> ' + (Date.now() - start))
 };
-const creatInViewImgPos = arr => {
-    let start = Date.now();
-    for(let i = 0; i < arr.length; i++){
-        let img = arr[i];
-        img && img.fun(false, 0.5);
-        if(img.isNear === true || img.isNear === 1) {
-            console.log('in view img.id ======> ', img.id);
-            console.log(`================creatInViewImgPos cost ${ Date.now() - start }================`);
-            return img.id;
-        }
-    }
-};
+// 刷新所有img 位置
+const creatInViewImgPos = arr => arr.slice().forEach(img => img.fun(false, 0.5));
 /**
  * 图片缓冲区的图片要没了的时候调用
  * 添加缓冲图片
  */
-const addBufferImg = id => {
-
-    // 找到视觉中心的 索引，id
-    let index = lazyLoadImgs.findIndex(img => img.id === id);
-    if(index === -1){
-        index = lazyLoadImgs.findIndex(img => img.isNear === true || img.isNear === 1 || img.isNear === 2);
-        id = lazyLoadImgs[index].id;
-    }
-
-
-    if(imgBuffer.findIndex(img => img.id === id) === -1){
-        for(let i = 0; i < imgBuffer.length; i++) {
-            idMap[imgBuffer[i].id] = 1;
+const addBufferImg = () => {
+    // buffer 自我检查
+    imgBuffer = imgBuffer.filter(img => {
+        if(!img.isNear) {
+            delete idMap2[img.id];
+            return false;
         }
-        imgBuffer = [];
+        return true;
+    });
+    if(!imgBuffer.length){
+        for(let i = 0; i < lazyLoadImgs.length; i++){
+            let img = lazyLoadImgs[i];
+            if(!img.isNear) {
+                imgBuffer.push(img);
+                idMap2[img.id] = true;
+            }
+        }
     }
-
-    if(imgBuffer.length === 0) {
-        imgBuffer.push(lazyLoadImgs[index]);
-        idMap[lazyLoadImgs[index].id] = 2;
-    }
-
     if(imgBuffer.length <= bufferLen / 2 && imgBuffer.length) {
-        // let index = lazyLoadImgs.findIndex(img => imgBuffer[0].id === img.id);
+        let index = lazyLoadImgs.findIndex(img => imgBuffer[0].id === img.id);
         let startIndex = Math.max(0, index - 10);
         let endIndex = Math.min(lazyLoadImgs.length, index + 10);
         let secondBuffer = lazyLoadImgs.slice(startIndex, endIndex);
@@ -105,18 +85,9 @@ const addBufferImg = id => {
         doAdd(lazyLoadImgs);
     }
 };
-let tt = 0;
-let ttt = null;
-const controlImgLoad = (centerImgId) => {
-    tt++;
-    if(!!ttt) clearTimeout(ttt);
-    ttt = setTimeout(() => {
-        console.log('frequency>>>>>>>>>>', tt);
-        tt = 0;
-    }, 20);
-
+const controlImgLoad = () => {
     if(cacling) return;
-    addBufferImg(centerImgId);
+    addBufferImg();
     let arr = (imgBuffer.length >= 1 ? imgBuffer : lazyLoadImgs).slice();
     let len = arr.length;
     console.log(imgBuffer.length === arr.length);
@@ -124,9 +95,9 @@ const controlImgLoad = (centerImgId) => {
         arr[i] && arr[i].fun(false, 0.5);
         if( !!arr[i].isNear &&
             imgBuffer.length < bufferLen &&
-            idMap[arr[i].id] === 1) { // 不重复添加
+            !idMap2[arr[i].id]) { // 不重复添加
 
-            idMap[arr[i].id]++;
+            idMap2[arr[i].id] = true;
             imgBuffer.push(arr[i]);
         }
     }
@@ -136,10 +107,9 @@ const controlImgLoad = (centerImgId) => {
 
 export const lazyLoadController = () => {
     let len = lazyLoadImgs.length;
-    let centerImgId = creatInViewImgPos(lazyLoadImgs);
-    // controlImgLoad();
+    // creatInViewImgPos(lazyLoadImgs);
     if(!!timer) clearTimeout(timer);
-    timer = setTimeout(() => controlImgLoad(centerImgId), 16);
+    timer = setTimeout(controlImgLoad, 16);
     if(len === 0 && isListen === true) toggleListener('remove');
 };
 
