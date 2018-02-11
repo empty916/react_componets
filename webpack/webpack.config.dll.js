@@ -13,7 +13,7 @@ const getPath = (pathStr) => path.resolve(__dirname,pathStr);
 module.exports = {
     entry: {
         vendors: [
-            // 'es6-promise',
+            'babel-polyfill',
             'react',
             'react-dom',
             'classnames',
