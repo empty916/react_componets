@@ -27,7 +27,7 @@ config.plugins.push(configEnv('production',false,false));
 
 // 拷贝dll文件到打包路径
 config.plugins.push(configCopyFile());
-config.plugins.push(configBundleAnalyzer());
+// config.plugins.push(configBundleAnalyzer());
 
 // 根据index.html为模板生成对应html页面
 config.plugins.push(configHtml('index', 'production'));

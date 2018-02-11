@@ -22,7 +22,7 @@ config.plugins.push(configUglify());
 config.plugins.push(configEnv('test',false,false));
 
 config.plugins.push(configCopyFile());
-config.plugins.push(configBundleAnalyzer());
+// config.plugins.push(configBundleAnalyzer());
 
 // 根据index.html为模板生成对应html页面
 config.plugins.push(configHtml('index', 'test'));

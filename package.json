@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --config webpack/webpack.config.dev.js",
-    "build": "webpack --display-used-exports --config webpack/webpack.config.prod.js",
+    "build": "rimraf assets && webpack --display-used-exports --config webpack/webpack.config.prod.js",
     "build:dll": "rimraf cache/js/* && webpack --display-used-exports --progress --colors --config webpack/webpack.config.dll.js",
-    "build:test": "webpack --display-used-exports --config webpack/webpack.config.test.js"
+    "build:test": "rimraf assets && webpack --display-used-exports --config webpack/webpack.config.test.js"
   },
   "repository": {
     "type": "git",
