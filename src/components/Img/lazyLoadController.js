@@ -107,10 +107,8 @@ const controlImgLoad = () => {
 
 
 export const lazyLoadController = () => {
-    console.log('lazyLoadController do');
     let len = lazyLoadImgs.length;
-    if(!!timer) clearTimeout(timer);
-    timer = setTimeout(controlImgLoad, 16);
+    controlImgLoad();
     if(len === 0 && isListen === true) toggleListener('remove');
 };
 
