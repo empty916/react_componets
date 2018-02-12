@@ -90,6 +90,14 @@ class Img extends PureComponent{
             src,
             className,
         } = this.props;
+
+        let imgProps = {
+            src,
+            className,
+            onLoad: this.onLoad,
+            onError: this.loadErr,
+        };
+
         let hasImg = [
             <div className={`img ${className}`} ref={this.lazyLoadController}>
                 {
@@ -102,9 +110,10 @@ class Img extends PureComponent{
             </div>
         ];
         if(this.state.loading === 1){
-            hasImg.push(<img style={{display: 'none'}} src={src} className={className} onLoad={this.onLoad} onError={this.loadErr}/>);
+            imgProps.style = {display: 'none'};
+            hasImg.push(<img {...imgProps}/>);
         } else if(this.state.loading === false){
-            hasImg = <img src={src} className={className} onLoad={this.onLoad} onError={this.loadErr}/>;
+            hasImg = <img {...imgProps}/>;
         }
         return hasImg;
     }

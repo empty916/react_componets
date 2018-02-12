@@ -100,7 +100,9 @@ const controlImgLoad = () => {
     if(dataLen > 100) addBufferImg();
     let arr = (imgBuffer.length >= 1 ? imgBuffer : lazyLoadImgs).slice();
     let len = arr.length;
+    console.log('img buffer len', imgBuffer.length);
     for(let i =0; i < len; i++) arr[i].fun(false, 0.5);
+    // console.log('img buffer', imgBuffer);
     // timer = null;
     cacling =false;
 };
