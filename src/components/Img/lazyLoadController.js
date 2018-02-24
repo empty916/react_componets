@@ -59,14 +59,16 @@ const findNearImg = (exeFun = false) => {
  */
 const addBufferImg = () => {
     bufferCheck();
-    !imgBuffer.length && findNearImg();
-    !imgBuffer.length && findNearImg(true);
+    if(!imgBuffer.length) findNearImg();
+    if(!imgBuffer.length) findNearImg(true);
 
     if(imgBuffer.length) {
         let index = lazyLoadImgs.findIndex(img => imgBuffer[0].id === img.id);
         let startIndex = Math.max(0, index - 15);
         let endIndex = Math.min(lazyLoadImgs.length, index + imgBuffer.length + 15);
+
         let secondBuffer = lazyLoadImgs.slice(startIndex, endIndex);
+
         if(secondBuffer && !!secondBuffer.length) {
             secondBuffer.forEach(img=>idMap2[img.id] = true);
             imgBuffer = secondBuffer;
