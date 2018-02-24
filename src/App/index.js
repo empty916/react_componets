@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import './style.scss'
 import Img from '../components/Img'
-import Test from '../components/Test'
+import Test from '../components/RingProgressBar'
 import imgs from '../data/img'
 
 const btnStyle = {width: '100%',height: '200px',backgroundColor:'lightblue'};

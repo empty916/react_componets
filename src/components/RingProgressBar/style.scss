@@ -1,0 +1,15 @@
+#canvas-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  #canvas{
+    width: 100%;
+    background: linear-gradient(120deg,
+            rgb(223, 96, 96),
+            rgb(221, 76, 76),
+            rgb(221, 76, 76) 70%,
+            rgb(228, 131, 88)
+    );
+  }
+}
