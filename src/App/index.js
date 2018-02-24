@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import './style.scss'
 import Img from '../components/Img'
+import Test from '../components/Test'
 import imgs from '../data/img'
 
 const btnStyle = {width: '100%',height: '200px',backgroundColor:'lightblue'};
@@ -22,7 +23,7 @@ class App extends PureComponent {
         } = this.state;
 
         const sources = imgs.slice(0, Math.min(imgNum, 2000)).map((item, index)=><Img className='img' index={index} src={item} lazy/>);
-        return (
+        return <Test/> || (
             <div id='app'>
                 {showImg?sources:[
                     <input
