@@ -26,26 +26,9 @@ export const removeImgById = id => {
 // 标记此图是否在附近了
 export const signImgIsNear = (id, value) => {
     let img = lazyLoadImgs.find(img => img.id === id);
-    let img2 = imgBuffer.find(img => img.id === id);
     if(!!img) img.isNear = value;
-    if(!!img2) img2.isNear = value;
 };
 
-let doAdd = arr => {
-    arr = arr.slice();
-    let isNearSign;
-    for(let i = 0; i < arr.length; i++){
-        let img = arr[i];
-        // if(img === undefined || img.isNear === undefined) continue;
-        img.fun(false, 0.5);
-        if(!!img.isNear && !idMap2[img.id]){
-            imgBuffer.push(img);
-            idMap2[img.id] = true;
-        }
-        if(!!isNearSign && !img.isNear) break;
-        isNearSign = img.isNear;
-    }
-};
 // buffer 自我检查
 const bufferCheck = () => {
     if(!imgBuffer.length) return;
@@ -57,63 +40,61 @@ const bufferCheck = () => {
         return true;
     });
 };
+
+const findNearImg = (exeFun = false) => {
+    if(imgBuffer.length) return;
+    for (let i = 0; i < lazyLoadImgs.length; i++) {
+        let img = lazyLoadImgs[i];
+        if(exeFun) img.fun(false, 0.5);
+        if (!!img.isNear) {
+            imgBuffer.push(img);
+            idMap2[img.id] = true;
+            break;
+        }
+    }
+};
 /**
  * 图片缓冲区的图片要没了的时候调用
  * 添加缓冲图片
  */
 const addBufferImg = () => {
     bufferCheck();
-    if(!imgBuffer.length){
-        let isNearSign;
-        for(let i = 0; i < lazyLoadImgs.length; i++){
-            let img = lazyLoadImgs[i];
-            if(!img.isNear) {
-                imgBuffer.push(img);
-                idMap2[img.id] = true;
-            }
-            if(!!isNearSign && !img.isNear || imgBuffer.length > 20) break;
-            isNearSign = img.isNear;
-        }
-        bufferCheck();
-    }
+    !imgBuffer.length && findNearImg();
+    !imgBuffer.length && findNearImg(true);
+
     if(imgBuffer.length) {
         let index = lazyLoadImgs.findIndex(img => imgBuffer[0].id === img.id);
         let startIndex = Math.max(0, index - 15);
-        let endIndex = Math.min(lazyLoadImgs.length, index + 15);
+        let endIndex = Math.min(lazyLoadImgs.length, index + imgBuffer.length + 15);
         let secondBuffer = lazyLoadImgs.slice(startIndex, endIndex);
-        console.log('use secondBuffer', secondBuffer.length);
-        doAdd(secondBuffer);
-        return;
+        if(secondBuffer && !!secondBuffer.length) {
+            secondBuffer.forEach(img=>idMap2[img.id] = true);
+            imgBuffer = secondBuffer;
+        }
     }
-    bufferCheck();
-    console.log('use lazyLoadImgs', lazyLoadImgs.length);
-    if(imgBuffer.length <= 1) doAdd(lazyLoadImgs);
+
 };
 // 全局懒加载控制器，调用所用img组件中的图片加载控制器，只注册一个全局监听的方法做优化
 // 因为默认监听window scroll 事件，但是会有其他的情况也会造成视图变化，所以将控制器给开发者控制
 let timer = null;
 let cacling = false;
 
-const controlImgLoad = () => {
-    if(cacling) return;
-    let dataLen = lazyLoadImgs.length;
-    if(dataLen > 100) addBufferImg();
-    let arr = (imgBuffer.length >= 1 ? imgBuffer : lazyLoadImgs).slice();
-    let len = arr.length;
-    console.log('img buffer len', imgBuffer.length);
-    for(let i =0; i < len; i++) arr[i].fun(false, 0.5);
-    // console.log('img buffer', imgBuffer);
-    // timer = null;
-    cacling =false;
-};
 export const doLazyLoad = () => {
     if(timer) clearTimeout(timer);
     timer = setTimeout(lazyLoadController, 16);
 };
 export const lazyLoadController = () => {
-    let len = lazyLoadImgs.length;
-    controlImgLoad();
-    if(len === 0 && isListen === true) toggleListener('remove');
+
+    if(cacling) return;
+    let dataLen = lazyLoadImgs.length;
+    if(dataLen > 100) addBufferImg();
+    console.log('img buffer', imgBuffer);
+    let arr = (!!imgBuffer.length ? imgBuffer : lazyLoadImgs).slice();
+    let len = arr.length;
+    for(let i =0; i < len; i++) arr[i].fun(false, 0.5);
+    cacling =false;
+
+    if(!lazyLoadImgs.length && isListen === true) toggleListener('remove');
 };
 
 export const toggleListener = type => {

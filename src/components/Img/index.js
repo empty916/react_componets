@@ -53,6 +53,7 @@ class Img extends PureComponent{
     }
     // 图片加载失败后的操作
     loadErr(){
+        doLazyLoad();
         this.releaseImg();
         this.setState({
             isLoadingError: true,
