@@ -43,14 +43,16 @@ const bufferCheck = () => {
 
 const findNearImg = (exeFun = false) => {
     if(imgBuffer.length) return;
+    let isNearSign;
     for (let i = 0; i < lazyLoadImgs.length; i++) {
         let img = lazyLoadImgs[i];
         if(exeFun) img.fun(false, 0.5);
-        if (!!img.isNear) {
+        if(!!img.isNear && !idMap2[img.id]){
             imgBuffer.push(img);
             idMap2[img.id] = true;
-            break;
         }
+        if(!!isNearSign && !img.isNear) break;
+        isNearSign = img.isNear;
     }
 };
 /**
