@@ -24,6 +24,7 @@ class Announcement extends PureComponent {
     }
 
     getSize(el) {
+        if(!el) return;
         let span = el.children[0];
         let data = {
             ratio: 1 + el.clientWidth / span.clientWidth,
