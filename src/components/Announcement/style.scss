@@ -1,0 +1,47 @@
+@import '../../styles/core/func';
+
+#announcement{
+  background: #EAF4FD;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: r(36);
+  font-size: r(12);
+  color: #4A90E2;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  overflow: hidden;
+  padding: 0 r(10);
+  .span1,
+  .span2
+  {
+    display: block;
+    white-space: nowrap;
+    word-break:keep-all;
+    position: relative;
+    animation: pao-ma-deng1 3s 30s linear;
+  }
+  .span2{
+    animation: pao-ma-deng2 3s 30s linear infinite;
+  }
+  @keyframes pao-ma-deng1 {
+    0% {
+      transform: translate(0,0);
+    }
+    100% {
+      transform: translate(-100%,0);
+    }
+  }
+  @keyframes pao-ma-deng2 {
+    0% {
+      left: 100%;
+      transform: translate(0,0);
+    }
+    100% {
+      left: 0;
+      transform: translate(-100%,0);
+    }
+  }
+}
