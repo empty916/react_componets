@@ -45,7 +45,7 @@ class Announcement extends PureComponent {
             ratio,
         } = this.state;
         delay = spanClass === 1 ? delay : 0;
-        duration = duration * ratio;
+        duration = spanClass === 1 ? duration : duration * ratio;
 
         return <div id="announcement" ref={this.getSize}>
             <span
