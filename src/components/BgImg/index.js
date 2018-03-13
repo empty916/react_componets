@@ -15,24 +15,26 @@ let spaces = <span>&nbsp;&nbsp;</span>;
 let bgiS = {
     background: `no-repeat center 100% auto`,
     backgroundRepeat: 'no-repeat',
-    backgroundSize: '100% auto',
+    backgroundSize: 'auto 100%',
     backgroundPosition: 'center',
-    backgroundImage: `url(${require('../../images/background/ya.jpeg')})`,
+    backgroundImage: `url(${require('../../images/background/yun2.jpg')})`,
     justifyContent: 'center',
     alignItems: 'center',
 };
 
 let content = {
-    marginTop: `${-500/75}rem`,
-    fontSize: `${100/75}rem`,
-    fontFamily: fontMap['qk'],
+    marginTop: `${-250/75}rem`,
+    fontSize: `${120/75}rem`,
+    fontFamily: fontMap['mnfz'],
+    color: '#fff',
+    // fontWeight: 'bold'
     // marginBottom: '20px',
 };
 
 class BgImg extends PureComponent{
     state = {
         isFullScreen: false,
-        col1Text: '黜聪毁智',
+        col1Text: '再见山河多壮丽',
         col2Text: '对境无心',
         optionHide: false,
     };
@@ -65,36 +67,12 @@ class BgImg extends PureComponent{
         return(
             <div id='bg-img' 
                  ref='wrapper'
-                 onClick={this.toggleFullScreen}
+                 // onClick={this.toggleFullScreen}
                  style={bgiS}>
-                {
-                    optionHide ? '' : (
-                        <div className="option-wrapper">
-                            <div className="col-text">
-                                <span>第一列文字</span>
-                                <input type="text"
-                                       value={col1Text}
-                                       onChange={e => this.inputText(e, 'col1Text')}/>
-                            </div>
-                            <div className="col-text">
-                                <span>第二列文字</span>
-                                <input type="text"
-                                       value={col2Text}
-                                       onChange={e => this.inputText(e, 'col2Text')}/>
-                            </div>
-
-                            <div className="submit-cancle">
-                                {/*<div className="submit">确定</div>*/}
-                                <div className="hide" onClick={this.hideOption}>隐藏输入面板</div>
-                            </div>
-                        </div>
-                    )
-                }
-
-                    <div className='qk-font' 
+                    <div className='qk-font'
                          ref='content'
                          style={content} >
-                        {spaces}{col2Text}<br/>
+                        {/*{spaces}{col2Text}<br/>*/}
                         {col1Text}
                     </div>
                 </div>
