@@ -11,34 +11,15 @@
 	font-family: WalkingInTheStreet;
 	src: url('../../fonts/WalkingInTheStreet.ttf');
 }
-@font-face {
+@font-face { // 清楷
 	font-family: QingKai;
 	src: url('../../fonts/QingKai.ttf');
 }
-@font-face {
+@font-face {// 迷你繁篆
 	font-family: MNFanZhuan;
 	src: url('../../fonts/MNFanZhuan.ttf');
 }
-@font-face {
+@font-face { // 康熙字典刻印版字体
 	font-family: KangXi;
 	src: url('../../fonts/KangXi.otf');
-}
-
-.sj-font{
-    font-family: FZShouJin;
-}
-.xy-font{
-    font-family: XingYan;
-}
-.qk-font{
-    font-family: QingKai;
-}
-.wits-font{
-    font-family: WalkingInTheStreet;
-}
-.mnfz-font{
-    font-family: MNFanZhuan;
-}
-.kx-font{
-    font-family: KangXi;
 }

@@ -3,7 +3,7 @@
  * @param {*} el dom元素
  */
 export const isInViewport = el => {
-    if(Object.prototype.toString.call(el) !== '[object HTMLDivElement]') return;
+    if (Object.prototype.toString.call(el) !== '[object HTMLDivElement]') return;
     const {
         top,
         bottom,
@@ -22,7 +22,7 @@ export const isInViewport = el => {
     let rightLimit = innerWidth;
 
     let calcLimit = ratio => {
-        ratio-= 1;
+        ratio -= 1;
         topLimit = -ratio * innerHeight;
         bottomLimit = (1 + ratio) * innerHeight;
         leftLimit = -ratio * innerWidth;
@@ -36,15 +36,15 @@ export const isInViewport = el => {
     );
 
     bottomLimit = 0.5 * innerHeight;
-    if(isInLimitView())return true;
+    if (isInLimitView()) return true;
     calcLimit(1.1);
-    if(isInLimitView())return 1.1;
+    if (isInLimitView()) return 1.1;
     calcLimit(2.1);
-    if(isInLimitView())return 2.1;
+    if (isInLimitView()) return 2.1;
     calcLimit(3.1);
-    if(isInLimitView())return 3.1;
+    if (isInLimitView()) return 3.1;
     calcLimit(5);
-    if(isInLimitView())return 5;
+    if (isInLimitView()) return 5;
     return -1;
 
 };
@@ -53,5 +53,28 @@ export const isInViewport = el => {
 export const getObjectType = obj => Object.prototype.toString.call(obj).slice(8).replace(']', '');
 
 // 生成id
-export const makeUniqueID = (randomLength = 8) => Number(Math.random().toString().substr(3,randomLength) + Date.now()).toString(36);
+export const makeUniqueID = (randomLength = 8) => Number(Math.random().toString().substr(3, randomLength) + Date.now()).toString(36);
 
+// element发起全屏
+export const launchFullscreen = element => {
+    if (element.requestFullscreencreen) {
+        element.requestFullScreen()
+    } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen()
+    } else if (element.webkitRequestFullScreen) {
+        element.webkitRequestFullScreen()
+    } else if (element.msRequestFullScreen) {
+        element.msRequestFullScreen()
+    }
+};
+
+// 退出全屏
+export const exitFullscreen = () => {
+    if (document.exitFullscreen) {
+        document.exitFullscreen()
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen()
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen()
+    }
+}
