@@ -1,8 +1,13 @@
 import React, { PureComponent } from 'react'
 import './style.scss'
+import '../style/core/font.scss'
+
+
+
 import Img from '../components/Img'
 import Test from '../components/RingProgressBar'
 import imgs from '../data/img'
+
 
 const btnStyle = {width: '100%',height: '200px',backgroundColor:'lightblue'};
 
@@ -21,21 +26,32 @@ class App extends PureComponent {
             imgNum,
             showImg,
         } = this.state;
-
-        const sources = imgs.slice(0, Math.min(imgNum, 2000)).map((item, index)=><Img className='img' index={index} src={item} lazy/>);
-        return <Test/> || (
+        
+        let bgiS = {
+            background: `no-repeat center 100% auto`,   
+            backgroundRepeat: 'no-repeat',         
+            backgroundSize: '100% auto',
+            backgroundPosition: 'center',
+            backgroundImage: `url(${require('../images/background/ya.jpeg')})`,
+        };
+        let content = {
+            marginTop: '-300px',
+            fontSize: '100px',
+        };
+        return (
             <div id='app'>
-                {showImg?sources:[
-                    <input
-                        type="number"
-                        max={2000}
-                        min={0}
-                        placeholder={'最大2000'}
-                        onChange={this.changeImgNum}/>
-                    ,<button style={btnStyle} onClick={() => this.setState({
-                        showImg: true,
-                    })}>确定</button>
-                ]}
+                <div className='wrapper' style={bgiS}>
+                    <div className='qk-font' style={content}>
+                        &nbsp;&nbsp;&nbsp;对境无心
+                        <br/>
+                        黜聪毁智
+                    </div>
+                    {/* <div className='mnfz-font'>罢聪毁智 对境无心</div> */}
+                    {/* <div className='kx-font'>黜聪毁智 对境无心</div> */}
+                    {/* <div className='kx-font' style={content}>
+                        若无闲事挂心头 <br/>&nbsp;&nbsp;&nbsp;便是人间好时节
+                    </div> */}
+                </div>
             </div>
         );
     }

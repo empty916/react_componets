@@ -1,7 +1,3 @@
-* {
-	box-sizing: border-box;
-}
-
 html,
 body,
 #app {
@@ -10,11 +6,14 @@ body,
 	height: 100%;
 }
 *{
+	box-sizing: border-box;
 	-webkit-overflow-scrolling: touch;
 }
 
+// WalkingInTheStreet
 #app {
 	justify-content: center;
+	font-size: 30px;
 	//& > div{
 	//	width: 100%;
 	//	height: 100%;
@@ -23,15 +22,20 @@ body,
 	//	flex-wrap: wrap;
 	//	//justify-content: center;
 	//}
+
 	.wrapper {
 		width: 100%;
-		min-height: 300px;
-		align-self: flex-start;
-		transform: translateX(30%)
+		// min-height: 300px;
+		// align-self: flex-start;
+		// transform: translateX(30%);
+		writing-mode:tb-rl;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 	.img{
-		// float: left;
 		width: 200px;
 		height: 205px;
 	}
+	
 }
