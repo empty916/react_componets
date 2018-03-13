@@ -5,6 +5,7 @@ import './style.scss'
 import '../../style/core/font.scss'
 import { launchFullscreen, exitFullscreen } from '../../utils'
 
+
 class BgImg extends PureComponent{
     state = {
         isFullScreen: false,
@@ -26,6 +27,8 @@ class BgImg extends PureComponent{
             backgroundSize: '100% auto',
             backgroundPosition: 'center',
             backgroundImage: `url(${require('../../images/background/ya.jpeg')})`,
+            justifyContent: 'center',
+            alignItems: 'center',
         };
         let fontMap = {
             kx: 'KangXi',
@@ -33,20 +36,21 @@ class BgImg extends PureComponent{
             qk: 'QingKai',
         }
         let content = {
-            marginTop: '-200px',
-            fontSize: '50px',
+            marginTop: '-800px',
+            fontSize: `${100/75}rem`,
             fontFamily: fontMap['qk'],
+            // marginBottom: '20px',
         };
+        let spaces = <span>&nbsp;&nbsp;&nbsp;</span>;
         return(
             <div id='bg-img' 
-                     ref='wrapper'
-                     onClick={this.toggleFullScreen}
-                     style={bgiS}>
+                 ref='wrapper'
+                //  onClick={this.toggleFullScreen}
+                 style={bgiS}>
                     <div className='qk-font' 
                          ref='content'
                          style={content} >
-                        &nbsp;&nbsp;&nbsp;对境无心
-                        <br/>
+                        {spaces}对境无心<br/>
                         黜聪毁智
                     </div>
                 </div>
