@@ -27,6 +27,7 @@ let content = {
     // marginRight: `${500/75}rem`,
     fontSize: `${130/75}rem`,
     fontFamily: fontMap['mnfz'],
+    // textShadow: '1px 1px 0px #212121',
     // color: '#030303',
     // marginBottom: '20px',
 };
