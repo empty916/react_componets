@@ -17,25 +17,25 @@ let bgiS = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'auto 100%',
     backgroundPosition: 'center',
-    backgroundImage: `url(${require('../../images/background/yun2.jpg')})`,
+    backgroundImage: `url(${require('../../images/background/bai_he.jpeg')})`,
     justifyContent: 'center',
     alignItems: 'center',
 };
 
 let content = {
-    marginTop: `${-250/75}rem`,
-    fontSize: `${120/75}rem`,
+    marginTop: `${-600/75}rem`,
+    // marginRight: `${500/75}rem`,
+    fontSize: `${130/75}rem`,
     fontFamily: fontMap['mnfz'],
-    color: '#fff',
-    // fontWeight: 'bold'
+    // color: '#030303',
     // marginBottom: '20px',
 };
 
 class BgImg extends PureComponent{
     state = {
         isFullScreen: false,
-        col1Text: '再见山河多壮丽',
-        col2Text: '对境无心',
+        col1Text: '慎 独',
+        col2Text: '对境忘情',
         optionHide: false,
     };
     constructor(params) {
@@ -67,7 +67,7 @@ class BgImg extends PureComponent{
         return(
             <div id='bg-img' 
                  ref='wrapper'
-                 // onClick={this.toggleFullScreen}
+                 onClick={this.toggleFullScreen}
                  style={bgiS}>
                     <div className='qk-font'
                          ref='content'
