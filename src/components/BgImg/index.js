@@ -9,6 +9,9 @@ let fontMap = {
     kx: 'KangXi',
     mnfz: 'MNFanZhuan',
     qk: 'QingKai',
+    dzcs: 'DanZhaiCaoShu',
+    sqxs: 'SongQingXingShu',
+    ywxs: 'YuWeiXingShu',
 };
 let spaces = <span>&nbsp;&nbsp;</span>;
 
@@ -19,27 +22,28 @@ let bgiS = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'auto 100%',
     backgroundPosition: 'center',
-    backgroundImage: `url(${require('../../images/background/chuan.jpg')})`,
-    justifyContent: 'flex-end',
+    backgroundImage: `url(${require('../../images/background/chuidiao.jpg')})`,
+    justifyContent: 'flex-start',
     alignItems: 'flex-start',
 };
 
 let content = {
     // marginTop: `${rem(-700)}`,
     // marginRight: `${rem(450)}`,
-    margin: `0 ${rem(10)} ${rem(155)} 0`,
-    fontSize: `${rem(80)}`,
-    fontFamily: fontMap['mnfz'],
+    margin: `${rem(10)} ${rem(100)} ${rem(0)} 0`,
+    fontSize: `${rem(20)}`,
+    fontFamily: fontMap['sqxs'],
+    letterSpacing: rem(3)
     // textShadow: '1px 1px 0px #212121',
-    color: '#adadad',
+    // color: '#adadad',
     // marginBottom: '20px',
 };
 
 class BgImg extends PureComponent{
     state = {
         isFullScreen: false,
-        col1Text: '临 江 仙',
-        col2Text: '高深渐可攀',
+        col2Text: '闲来垂钓碧溪上',
+        col1Text: '忽复乘舟梦日边',
         optionHide: false,
     };
     constructor(params) {
@@ -76,7 +80,8 @@ class BgImg extends PureComponent{
                     <div className='qk-font'
                          ref='content'
                          style={content} >
-                        {/*{spaces}{col2Text}<br/>*/}
+                        {/*{spaces}*/}
+                        {col2Text}<br/>
                         {col1Text}
                     </div>
                 </div>
