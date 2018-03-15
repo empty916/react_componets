@@ -32,7 +32,7 @@ let content = {
     // marginRight: `${rem(450)}`,
     margin: `${rem(10)} ${rem(100)} ${rem(0)} 0`,
     fontSize: `${rem(20)}`,
-    fontFamily: fontMap['sqxs'],
+    fontFamily: fontMap['kx'],
     letterSpacing: rem(3)
     // textShadow: '1px 1px 0px #212121',
     // color: '#adadad',
