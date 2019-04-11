@@ -93,7 +93,7 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(woff|woff2|ttf|eot|otf|svg)$/,
+                test: /\.(woff|woff2|ttf|eot|otf|ttc|svg)$/i,
                 exclude,
                 use: [
                     {

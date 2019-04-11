@@ -9,34 +9,41 @@ let fontMap = {
     kx: 'KangXi',
     mnfz: 'MNFanZhuan',
     qk: 'QingKai',
+    dzcs: 'DanZhaiCaoShu',
+    sqxs: 'SongQingXingShu',
+    ywxs: 'YuWeiXingShu',
 };
 let spaces = <span>&nbsp;&nbsp;</span>;
+
+const rem = num => `${num/75}rem`;
 
 let bgiS = {
     background: `no-repeat center 100% auto`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'auto 100%',
     backgroundPosition: 'center',
-    backgroundImage: `url(${require('../../images/background/shan.jpg')})`,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundImage: `url(${require('../../images/background/chuidiao.jpg')})`,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
 };
 
 let content = {
-    marginTop: `${-700/75}rem`,
-    marginRight: `${450/75}rem`,
-    fontSize: `${80/75}rem`,
-    fontFamily: fontMap['mnfz'],
+    // marginTop: `${rem(-700)}`,
+    // marginRight: `${rem(450)}`,
+    margin: `${rem(10)} ${rem(100)} ${rem(0)} 0`,
+    fontSize: `${rem(20)}`,
+    fontFamily: fontMap['kx'],
+    letterSpacing: rem(3)
     // textShadow: '1px 1px 0px #212121',
-    // color: '#030303',
+    // color: '#adadad',
     // marginBottom: '20px',
 };
 
 class BgImg extends PureComponent{
     state = {
         isFullScreen: false,
-        col1Text: '望去千重山',
-        col2Text: '高深渐可攀',
+        col2Text: '闲来垂钓碧溪上',
+        col1Text: '忽复乘舟梦日边',
         optionHide: false,
     };
     constructor(params) {
@@ -68,12 +75,13 @@ class BgImg extends PureComponent{
         return(
             <div id='bg-img' 
                  ref='wrapper'
-                 onClick={this.toggleFullScreen}
+                 // onClick={this.toggleFullScreen}
                  style={bgiS}>
                     <div className='qk-font'
                          ref='content'
                          style={content} >
-                        {spaces}{col2Text}<br/>
+                        {/*{spaces}*/}
+                        {col2Text}<br/>
                         {col1Text}
                     </div>
                 </div>
