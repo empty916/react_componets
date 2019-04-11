@@ -6,16 +6,17 @@ import './style.scss'
  * petal：花瓣
  */
 const r = px => {
-    if(/[A-Za-z]/.test(px)){ // 去除字母
-        px = px.replace(/[A-Za-z]/g, '');
-    }
-    if(px=='1'){
-        return '1px';
-    } else if(/%/.test(px)){
-        return px;
-    } else {
-        return px / 75 + 'rem';
-    }
+    return `${px}px`;
+    // if(/[A-Za-z]/.test(px)){ // 去除字母
+    //     px = px.replace(/[A-Za-z]/g, '');
+    // }
+    // if(px=='1'){
+    //     return '1px';
+    // } else if(/%/.test(px)){
+    //     return px;
+    // } else {
+    //     return px / 75 + 'rem';
+    // }
 }; // 样式单位适配
 
 // petalNum = 24; // 花瓣数量
@@ -52,7 +53,8 @@ class Flower extends PureComponent{
             petalNum,
             petalWidth, 
             petalHeight, 
-            petalBorderRadius 
+            petalBorderRadius,
+            scale,
         } = props ? props : this.props;
 
         petalNum = props ? this.state.petalNum : petalNum;
@@ -60,6 +62,7 @@ class Flower extends PureComponent{
 
         let state = {};
         state.time = time;
+        state.scale = scale;
         state.petalHeight = !!petalHeight ? petalHeight : (size / 4);
         state.petalBorderRadius = petalBorderRadius;
         state.petalBackGroundColor = bgColor;
@@ -91,20 +94,35 @@ class Flower extends PureComponent{
             animationDuration,
             rotateDeg,
             time,
+            scale,
         } = this.state;
 
-        return { // 根据index生成petal样式
-            width: r(petalWidth),
-            height: r(petalHeight),
+        const wrapper = { // 根据index生成petal样式
+            // width: r(petalWidth),
+            // height: r(petalHeight),
             position: 'absolute',
             left: '50%',
             opacity: initOpacity,
-            backgroundColor: petalBackGroundColor,
-            borderRadius: r(petalBorderRadius),
             transformOrigin: `${r(petalWidth / 2)} ${r(petalHeight * 2)}`,
             transform: `rotate(${index * rotateDeg}deg)`,
-            webkitAnimation: `load ${animationDuration}s ease infinite`,
-            animation: `load ${animationDuration}s linear ${time * index}s infinite`,
+            // webkitAnimation: `load ${animationDuration}s ease infinite`,
+            WebkitAnimation: `load-opacity ${animationDuration}s linear ${time * index}s infinite`,
+            animation: `load-opacity ${animationDuration}s linear ${time * index}s infinite`,
+        }
+        const child = {
+            width: r(petalWidth),
+            height: r(petalHeight),
+            
+            backgroundColor: petalBackGroundColor,
+            borderRadius: r(petalBorderRadius),
+        }
+        if (scale) {
+            child.WebkitAnimation = `load-scale ${animationDuration}s linear ${time * index}s infinite`;
+            child.animation = `load-scale ${animationDuration}s linear ${time * index}s infinite`;
+        }
+        return {
+            wrapper,
+            child,
         }
     };
 
@@ -112,7 +130,11 @@ class Flower extends PureComponent{
     render(){
         let petals = [];
         for(let i=0; i < this.state.petalNum; i++) {
-            petals.push(<div key={i} style = {this.getPetalStyle(i)}/>);
+            petals.push((
+                <div key={i} style={this.getPetalStyle(i).wrapper}>
+                    <div style={this.getPetalStyle(i).child}></div>
+                </div>
+            ));
         }
 
         return(
@@ -132,6 +154,7 @@ Flower.defaultProps = {
     petalNum: 24, // 花瓣数量
     time: 0.05*24, // 转动一圈所用的时间,感觉应该叫cycle(周期) 或者 frequency(频率)好点，
     update: false,// 要不要实时更新？就是动态修改菊花属性的时候会更新
+    scale: true,
 };
 
 export default Flower;

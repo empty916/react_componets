@@ -1,6 +1,3 @@
-@import '../../style/core/index.scss';
-
-
 $initOpacity: 0;
 
 #flower {
@@ -11,12 +8,20 @@ $initOpacity: 0;
         position: relative;
     }
 
-    @-webkit-keyframes load {
+    @-webkit-keyframes load-opacity {
         0% {
             opacity: 1;
         }
         100% {
             opacity: $initOpacity;
+        }
+    }
+    @-webkit-keyframes load-scale {
+        0% {
+            transform: scale(1);
+        }
+        100% {
+            transform: scale($initOpacity);
         }
     }
 }

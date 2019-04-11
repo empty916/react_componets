@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import './style.scss'
 
 import Img from '../components/Img'
-import Test from '../components/BgImg'
+import Test from '../components/FlowerM'
 import imgs from '../data/img'
 
 class App extends PureComponent {
